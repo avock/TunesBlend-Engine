@@ -10,7 +10,7 @@ Function to retrieve audio_features of a track
 
 """
 def get_audio_features(track_uri, sp):
-    audio_features = sp.audio_analysis(track_uri)[0]
+    audio_features = sp.audio_features(track_uri)[0]
     filtered_audio_features = filter_audio_feature(audio_features)
     return filtered_audio_features
 
@@ -24,7 +24,6 @@ def get_playlist_audio_features(playlist, sp):
     audio_features_list = []
     
     track_uris = get_track_uris(playlist)
-    print(track_uris)
     
     if (playlist['pid'] % 100 == 0):
         current_time = datetime.datetime.now()
