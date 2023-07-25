@@ -32,7 +32,7 @@ for i in range(10):
 
     for playlist in json_data['playlists'][:3]:
 
-        audio_features_list = get_playlist_audio_features(playlist, i, sp)
+        audio_features_list = get_playlist_audio_features(playlist, sp)
 
         audio_features.extend(audio_features_list)
 
