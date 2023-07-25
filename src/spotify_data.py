@@ -1,35 +1,41 @@
-"""
-List of features to be kept from the dataset
-"""
-target_audio_features = ['id', 'danceability', 'energy', 'key', 'loudness', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo', 'duration_ms']
+from src.data_processing import *
 
 """
 Function to retrieve audio_features of a track
 
 @param: Spotify Track URI
-@return: Json object of target track's complete audio_features
+@return: Json object of target track's complete + filtered audio_features
 
 """
 def get_audio_features(track_uri, sp):
     audio_features = sp.audio_features(track_uri)[0]
-    cleaned_audio_features = {target: audio_features[target] for target in target_audio_features if target in audio_features}
-    return cleaned_audio_features
+    filtered_audio_features = filter_audio_feature(audio_features)
+    return filtered_audio_features
 
 """
+Function to retrieve audio_features of every track in a playlist
 
+@param: a playlist JSON object 
+@return: Array of track_uri with globally unique identifier
 """
-def get_playlist_audio_features(playlist, file_id, sp):
+def get_playlist_audio_features(playlist, sp):
     
     audio_features_list = []
     
-    track_uris = [track['track_uri'] for track in playlist['tracks']]
-    pid = playlist['pid']
-    file_id = file_id
+    track_uris = get_track_uris(playlist)
     
+    # global unique identifier for each track
+    
+    count = 0
     for track_uri in track_uris[:10]:
         audio_feature = get_audio_features(track_uri, sp)
-        audio_feature['pid'] = pid
-        audio_feature['file_id'] = file_id
+        
+        pid = playlist['pid']
+        track_id = count; count+=1
+        id = str(pid) + "_" + str(track_id)
+        
+        audio_feature['id'] = id
+        
         audio_features_list.append(audio_feature)
     
     return audio_features_list
