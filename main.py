@@ -29,7 +29,6 @@ for i in range(10):
     processed_data_path = os.path.join(current_dir, relative_processed_data_path)
     
     json_data = read_data(raw_data_path)
-
     for playlist in json_data['playlists']:
 
         audio_features_list = get_playlist_audio_features(playlist, sp)
