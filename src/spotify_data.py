@@ -24,6 +24,7 @@ def get_playlist_audio_features(playlist, sp):
     audio_features_list = []
     
     track_uris = get_track_uris(playlist)
+    print(track_uris)
     
     if (playlist['pid'] % 100 == 0):
         current_time = datetime.datetime.now()

@@ -1,9 +1,10 @@
 import spotipy, os, pprint
-from spotipy.oauth2 import SpotifyClientCredentials
+from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
 from dotenv import load_dotenv
 
 from src.data_processing import *
 from src.spotify_data import *
+
 
 load_dotenv()
 
@@ -13,8 +14,10 @@ SpotiPy instance to fetch authenticate connection to Spotify API
 client_id = os.getenv('CLIENT_ID')
 client_secret = os.getenv('CLIENT_SECRET')
 
-client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
+                                               client_secret=client_secret,
+                                               redirect_uri="http://localhost:8000/callback",
+                                               scope="user-library-read"))
 
 audio_features = []
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -30,7 +33,6 @@ for i in range(10):
     
     json_data = read_data(raw_data_path)
     for playlist in json_data['playlists']:
-
         audio_features_list = get_playlist_audio_features(playlist, sp)
 
         audio_features.extend(audio_features_list)
@@ -39,3 +41,8 @@ for i in range(10):
 
     # Reset audio_features_list for the next raw_data_file
     audio_features = []
+
+# results = sp.current_user_saved_tracks()
+# for idx, item in enumerate(results['items']):
+#     track = item['track']
+#     print(idx, track['artists'][0]['name'], " – ", track['name'])
