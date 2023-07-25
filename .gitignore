@@ -1,0 +1,6 @@
+.env
+*.json
+*.csv
+/venv
+
+# https://github.com/avock/SpotiSense-Engine.git
