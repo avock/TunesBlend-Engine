@@ -30,7 +30,7 @@ for i in range(10):
     
     json_data = read_data(raw_data_path)
 
-    for playlist in json_data['playlists'][:3]:
+    for playlist in json_data['playlists']:
 
         audio_features_list = get_playlist_audio_features(playlist, sp)
 

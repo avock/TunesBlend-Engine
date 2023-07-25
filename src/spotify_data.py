@@ -1,3 +1,5 @@
+import datetime
+
 from src.data_processing import *
 
 """
@@ -24,10 +26,12 @@ def get_playlist_audio_features(playlist, sp):
     
     track_uris = get_track_uris(playlist)
     
-    # global unique identifier for each track
+    if (playlist['pid'] % 100 == 0):
+        current_time = datetime.datetime.now()
+        print(f'Started playlist {playlist["pid"]} at {current_time}')
     
     count = 0
-    for track_uri in track_uris[:10]:
+    for track_uri in track_uris:
         audio_feature = get_audio_features(track_uri, sp)
         
         pid = playlist['pid']
