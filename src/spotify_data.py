@@ -151,9 +151,8 @@ def get_track_genre(playlist, sp):
         artist_genre_chunk = get_artist_genre(chunk, sp)
         album_genre_chunk = get_album_genre(chunk, sp)
         
-        track_genre_chunk = arr_combine(artist_genre_chunk, album_genre_chunk)
+        track_genre_chunk = arr_cleanup(arr_combine(artist_genre_chunk, album_genre_chunk))
         
-
         pid = playlist['pid']
         for genre in track_genre_chunk:
             id = f"{pid}_{track_id}"
