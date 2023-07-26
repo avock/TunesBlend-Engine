@@ -1,4 +1,4 @@
-import datetime
+import datetime, pprint
 
 from src.data_processing import *
 
@@ -9,9 +9,9 @@ Function to retrieve audio_features of a track
 @return: Json object of target track's complete + filtered audio_features
 
 """
-def get_audio_features(track_uri, sp):
-    audio_features = sp.audio_features(track_uri)[0]
-    filtered_audio_features = filter_audio_feature(audio_features)
+def get_audio_features(track_uris, sp):
+    audio_features = sp.audio_features(track_uris)
+    filtered_audio_features = [filter_audio_feature(audio_feature) for audio_feature in audio_features]
     return filtered_audio_features
 
 """
@@ -21,24 +21,27 @@ Function to retrieve audio_features of every track in a playlist
 @return: Array of track_uri with globally unique identifier
 """
 def get_playlist_audio_features(playlist, sp):
+    print(f"Processing Playlist {playlist['pid']}")
+    
     audio_features_list = []
-    
     track_uris = get_track_uris(playlist)
-    
-    if (playlist['pid'] % 100 == 0):
+
+    # prints status update every 100 playlists
+    if playlist['pid'] % 100 == 0:
         current_time = datetime.datetime.now()
         print(f'Started playlist {playlist["pid"]} at {current_time}')
+
+    chunk_size = 100
+    track_id = 0
     
-    count = 0
-    for track_uri in track_uris:
-        audio_feature = get_audio_features(track_uri, sp)
-        
+    for i in range(0, len(track_uris), chunk_size):
+        chunk = track_uris[i:i + chunk_size]
+        audio_features_chunk = get_audio_features(chunk, sp)
+
         pid = playlist['pid']
-        track_id = count; count+=1
-        id = str(pid) + "_" + str(track_id)
-        
-        audio_feature['id'] = id
-        
-        audio_features_list.append(audio_feature)
-    
+        for audio_feature in audio_features_chunk:
+            id = f"{pid}_{track_id}"
+            audio_feature['id'] = id
+            audio_features_list.append(audio_feature)
+
     return audio_features_list
