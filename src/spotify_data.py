@@ -121,3 +121,40 @@ def get_artist_genre(track_uris, sp):
 """
 
 """
+def get_playlist_genre(playlist, sp):
+ 
+    genre_list = []
+    track_uris = get_track_uris(playlist)
+    playlist_id = playlist['pid']
+
+    """
+    Setup GVP VM to handle large amounts of data cleanup.
+    Prints status every 100 playlist processed.
+    """
+    if playlist_id % 100 == 0:
+        current_time = datetime.datetime.now()
+        status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
+        print(status_update_message)
+    
+    """
+    Setup Telegram Bot to send status update every 500 playlist processed.
+    """        
+    if playlist_id % 500 == 0 and playlist_id != 0:
+        current_time = datetime.datetime.now()
+        status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
+        send_telegram_message(status_update_message)
+
+    chunk_size = 50
+    track_id = 0
+    
+    for i in range(0, len(track_uris), chunk_size):
+        chunk = track_uris[i:i + chunk_size]
+        genre_chunk = get_artist_genre(chunk, sp)
+
+        pid = playlist['pid']
+        for genre in genre_chunk:
+            id = f"{pid}_{track_id}"
+            genre['id'] = id
+            genre_list.append(genre)
+
+    return genre_list
