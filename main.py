@@ -23,7 +23,7 @@ audio_features = []
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # loops through all 10 raw_data_files
-for i in range(10) [:1]:
+for i in range(10):
 
     relative_raw_data_path = f'data/raw_data/mpd.slice.{i*1000}-{(i+1)*1000 - 1}.json'
     raw_data_path = os.path.join(current_dir, relative_raw_data_path)
@@ -32,7 +32,7 @@ for i in range(10) [:1]:
     processed_data_path = os.path.join(current_dir, relative_processed_data_path)
     
     json_data = read_data(raw_data_path)
-    for playlist in json_data['playlists'][:100]:
+    for playlist in json_data['playlists']:
         audio_features_list = get_playlist_audio_features(playlist, sp)
 
         audio_features.extend(audio_features_list)
