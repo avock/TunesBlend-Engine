@@ -23,7 +23,7 @@ audio_features = []
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # loops through all 10 raw_data_files
-for i in range(10):
+for i in range(6,10):
 
     relative_raw_data_path = f'data/raw_data/mpd.slice.{i*1000}-{(i+1)*1000 - 1}.json'
     raw_data_path = os.path.join(current_dir, relative_raw_data_path)
