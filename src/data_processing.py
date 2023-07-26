@@ -11,6 +11,8 @@ def read_data(json_file_path):
         json_data = json.load(file)
     return json_data
 
+
+
 """
 Function to write data to a CSV file
 
@@ -20,6 +22,8 @@ Function to write data to a CSV file
 def write_data(audio_features_list, file_path):
     audio_features_df = pd.DataFrame(audio_features_list)
     audio_features_df.to_csv(file_path, mode='a', index=False)
+
+
 
 """
 Function to clean up audio_features of each track to target_features only
@@ -35,6 +39,8 @@ def filter_audio_feature(audio_features):
     target_audio_features = {target: audio_features[target] for target in TARGET_AUDIO_FEATURES if target in audio_features}
     return target_audio_features
 
+
+
 """
 Function to extract uri of every track from playlist
 
@@ -44,3 +50,16 @@ Function to extract uri of every track from playlist
 def get_track_uris(playlist):
     track_uris =[track['track_uri'] for track in playlist['tracks']]
     return track_uris
+
+
+
+"""
+Remove duplicates from the input array and sort the elements in alphabetical order.
+
+@param arr: A list or array containing elements.
+@return: A new list with duplicates removed and elements sorted in alphabetical order.
+"""
+def arr_cleanup(arr):
+    
+    cleaned_arr = [sorted(list(set(sublist))) for sublist in arr]
+    return cleaned_arr
