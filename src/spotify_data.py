@@ -58,6 +58,7 @@ def get_playlist_audio_features(playlist, sp):
             id = f"{pid}_{track_id}"
             audio_feature['id'] = id
             audio_features_list.append(audio_feature)
+            track_id += 1
 
     return audio_features_list
 
@@ -109,7 +110,6 @@ def get_artist_genre(track_uris, sp):
         return artist_genre
     
     else:
-
         track_details_list = sp.tracks(track_uris)
         artist_id_list = [track['artists'][0]['id'] for track in track_details_list['tracks']]
         artist_genre_list = [sp.artist(artist)['genres'] for artist in artist_id_list]
@@ -121,8 +121,7 @@ def get_artist_genre(track_uris, sp):
 """
 
 """
-def get_playlist_genre(playlist, sp):
- 
+def get_track_genre(playlist, sp):
     genre_list = []
     track_uris = get_track_uris(playlist)
     playlist_id = playlist['pid']
