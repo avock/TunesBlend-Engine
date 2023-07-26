@@ -15,6 +15,8 @@ def get_audio_features(track_uris, sp):
     filtered_audio_features = [filter_audio_feature(audio_feature) for audio_feature in audio_features]
     return filtered_audio_features
 
+
+
 """
 Function to retrieve audio_features of every track in a playlist
 
@@ -59,6 +61,8 @@ def get_playlist_audio_features(playlist, sp):
 
     return audio_features_list
 
+
+
 """
 Function to retreive the genre(s) of the album for one or multiple tracks.
 
@@ -83,6 +87,8 @@ def get_album_genre(track_uris, sp):
         album_genre_list = [sp.album(album)['genres'] for album in album_id_list]
 
         return album_genre_list
+
+
 
 """
 Function to retrieve the genre(s) of the artist for one or multiple tracks.
@@ -109,3 +115,9 @@ def get_artist_genre(track_uris, sp):
         artist_genre_list = [sp.artist(artist)['genres'] for artist in artist_id_list]
 
         return artist_genre_list
+
+
+
+"""
+
+"""
