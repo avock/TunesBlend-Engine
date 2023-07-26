@@ -1,4 +1,5 @@
 import json, os, pandas as pd
+from itertools import zip_longest
 
 """
 Function to read data from a JSON file
@@ -63,3 +64,23 @@ def arr_cleanup(arr):
     
     cleaned_arr = [sorted(list(set(sublist))) for sublist in arr]
     return cleaned_arr
+
+
+
+"""
+Combine two arrays of subarrays by pairing their elements together.
+
+@param arr1, arr2: The first and second array of subarrays.
+
+@return: A new array where each subarray contains elements paired from arr1 and arr2.
+"""
+def arr_combine(arr1, arr2):
+    combined = []
+    for sub_arr1, sub_arr2 in zip_longest(arr1, arr2):
+        combined_sub_arr = []
+        if sub_arr1:
+            combined_sub_arr.extend(sub_arr1)
+        if sub_arr2:
+            combined_sub_arr.extend(sub_arr2)
+        combined.append(combined_sub_arr)
+    return combined
