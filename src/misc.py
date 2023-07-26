@@ -18,9 +18,9 @@ def send_telegram_message(message):
     }
     response = requests.post(url, headers=headers, data=json.dumps(payload))
     if response.status_code == 200:
-        print("Message sent successfully!")
+        pass
     else:
-        print(f"Failed to send message. Error code: {response.status_code}")
+        print(f"Failed to send telegram message. Error code: {response.status_code}")
         
 def get_chat_id():
     url = f'https://api.telegram.org/bot{bot_token}/getUpdates'
