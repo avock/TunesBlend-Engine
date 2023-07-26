@@ -21,7 +21,6 @@ Function to retrieve audio_features of every track in a playlist
 @return: Array of track_uri with globally unique identifier
 """
 def get_playlist_audio_features(playlist, sp):
-    print(f"Processing Playlist {playlist['pid']}")
     
     audio_features_list = []
     track_uris = get_track_uris(playlist)
