@@ -1,6 +1,7 @@
 import datetime, pprint
 
 from src.data_processing import *
+from src.misc import *
 
 """
 Function to retrieve audio_features of a track
@@ -26,12 +27,21 @@ def get_playlist_audio_features(playlist, sp):
     track_uris = get_track_uris(playlist)
 
     """
-    Setup GVP VM to handle large amounts of data cleanup.s
+    Setup GVP VM to handle large amounts of data cleanup.
     Prints status every 100 playlist processed.
     """
     if playlist['pid'] % 100 == 0:
         current_time = datetime.datetime.now()
-        print(f'Begin processing playlist {playlist["pid"]} at {current_time}')
+        status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
+        print(status_update_message)
+    
+    """
+    Setup Telegram Bot to send status update every 500 playlist processed.
+    """        
+    if playlist['pid'] % 500 == 0:
+        current_time = datetime.datetime.now()
+        status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
+        send_telegram_message(status_update_message)
 
     chunk_size = 100
     track_id = 0
