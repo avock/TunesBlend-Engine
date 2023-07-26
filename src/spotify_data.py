@@ -44,7 +44,7 @@ def get_playlist_audio_features(playlist, sp):
         status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
         send_telegram_message(status_update_message)
 
-    chunk_size = 100
+    chunk_size = 50
     track_id = 0
     
     for i in range(0, len(track_uris), chunk_size):
@@ -58,3 +58,54 @@ def get_playlist_audio_features(playlist, sp):
             audio_features_list.append(audio_feature)
 
     return audio_features_list
+
+"""
+Function to retreive the genre(s) of the album for one or multiple tracks.
+
+@param track_uris: str or list - The track URI(s) for which to retrieve the genre(s).
+@param sp: Spotipy object - The Spotipy client object for making API calls.
+
+@return: list - The genre(s) of the album for the given track(s) in a list.
+"""
+def get_album_genre(track_uris, sp):
+
+    if not isinstance(track_uris, list):
+        
+        track_details = sp.track(track_uris)
+        album_id = track_details['album']['id']
+        album_genre = sp.album(album_id)['genres']
+        
+        return album_genre
+    else:
+
+        track_details_list = sp.tracks(track_uris)
+        album_id_list = [track['album']['id'] for track in track_details_list['tracks']]
+        album_genre_list = [sp.album(album)['genres'] for album in album_id_list]
+
+        return album_genre_list
+
+"""
+Function to retrieve the genre(s) of the artist for one or multiple tracks.
+
+@param track_uris: str or list - The track URI(s) for which to retrieve the genre(s).
+@param sp: Spotipy object - The Spotipy client object for making API calls.
+
+@return: The genre(s) of the artist for the given track(s) in a list.
+"""
+def get_artist_genre(track_uris, sp):
+    
+    if not isinstance(track_uris, list):
+        
+        track_details = sp.track(track_uris)
+        artist_id = track_details['artists'][0]['id']
+        artist_genre = sp.artist(artist_id)['genres']
+        
+        return artist_genre
+    
+    else:
+
+        track_details_list = sp.tracks(track_uris)
+        artist_id_list = [track['artists'][0]['id'] for track in track_details_list['tracks']]
+        artist_genre_list = [sp.artist(artist)['genres'] for artist in artist_id_list]
+
+        return artist_genre_list
