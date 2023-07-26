@@ -9,7 +9,16 @@ TelegramBot Instance to send message to user
 bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
 chat_id = os.getenv('TELEGRAM_CHAT_ID_SELF')
 
-def send_telegram_message(message):
+"""
+Function to send message to message to specified chat_id
+
+@param: 
+    - Telegram Bot's botToken to send said message (SpotiSenseBot by default if not specified)
+    - ChatId of chat to send message (Chat with CK by default if not specified)
+    - Message to be sent
+@return: N/A if success, prints error message if failed to send message
+"""
+def send_telegram_message(message, bot_token=bot_token, chat_id=chat_id):
     url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
     headers = {'Content-Type': 'application/json'}
     payload = {
@@ -21,7 +30,10 @@ def send_telegram_message(message):
         pass
     else:
         print(f"Failed to send telegram message. Error code: {response.status_code}")
-        
+       
+"""
+Function to obtain list of chat_id of the telegram bot
+""" 
 def get_chat_id():
     url = f'https://api.telegram.org/bot{bot_token}/getUpdates'
     response = requests.get(url)
