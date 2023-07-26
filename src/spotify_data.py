@@ -25,10 +25,13 @@ def get_playlist_audio_features(playlist, sp):
     audio_features_list = []
     track_uris = get_track_uris(playlist)
 
-    # prints status update every 100 playlists
+    """
+    Setup GVP VM to handle large amounts of data cleanup.s
+    Prints status every 100 playlist processed.
+    """
     if playlist['pid'] % 100 == 0:
         current_time = datetime.datetime.now()
-        print(f'Started playlist {playlist["pid"]} at {current_time}')
+        print(f'Begin processing playlist {playlist["pid"]} at {current_time}')
 
     chunk_size = 100
     track_id = 0
