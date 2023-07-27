@@ -9,7 +9,7 @@ Environment Variables
 """
 load_dotenv()
 bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
-chat_id = os.getenv('TELEGRAM_CHAT_ID_SELF') # default chat id
+chat_id_ck = os.getenv('TELEGRAM_CHAT_ID_SELF') # default chat id
 chat_id_dev = os.getenv('TELEGRAM_CHAT_ID_DEV')
 
 """
@@ -28,7 +28,7 @@ Function to send message to message to specified chat_id
     - Message to be sent
 @return: N/A if success, prints error message if failed to send message
 """
-def send_message(chat_id, message):
+def send_message(message, chat_id=chat_id_ck):
     telegram_bot.bot.send_message(chat_id=chat_id, text=message)
 
 
