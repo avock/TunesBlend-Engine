@@ -1,7 +1,7 @@
 import datetime, pprint
 
 from src.data_processing import *
-from src.misc import *
+from src.telegram_bot import *
 
 
 
@@ -141,7 +141,7 @@ def get_track_genre(playlist, sp):
     Setup GVP VM to handle large amounts of data cleanup.
     Prints status every 100 playlist processed.
     """
-    if playlist_id % 100 == 0:
+    if playlist_id % 50 == 0:
         current_time = datetime.datetime.now()
         status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
         print(status_update_message)
@@ -149,7 +149,7 @@ def get_track_genre(playlist, sp):
     """
     Setup Telegram Bot to send status update every 500 playlist processed.
     """        
-    if playlist_id % 500 == 0 and playlist_id != 0:
+    if playlist_id % 250 == 0 and playlist_id != 0:
         current_time = datetime.datetime.now()
         status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
         send_telegram_message(status_update_message)
@@ -161,15 +161,17 @@ def get_track_genre(playlist, sp):
     for i in range(0, len(track_uris), chunk_size):
         chunk = track_uris[i:i + chunk_size]
         
-        pid = playlist['pid']
-        print(f"Playlist {pid} @ {datetime.datetime.now()}")
-        
         artist_genre_chunk = get_artist_genre(chunk, sp)
-        album_genre_chunk = get_album_genre(chunk, sp)
         
-        track_genre_chunk = arr_cleanup(arr_combine(artist_genre_chunk, album_genre_chunk))
+        """
+        * NOTE: as of 27/07/23, albums do NOT return any genres. So get_album_genres() removed for now, to reduce spotify API calls
+        """
+        # album_genre_chunk = get_album_genre(chunk, sp)
+        # track_genre_chunk = arr_cleanup(arr_combine(artist_genre_chunk, album_genre_chunk))
+        track_genre_chunk = artist_genre_chunk
+        
         for genre in track_genre_chunk:
-            id = f"{pid}_{track_id}"
+            id = f"{playlist_id}_{track_id}"
             # genre['id'] = id
             genre_list.append(genre)
             track_id += 1
