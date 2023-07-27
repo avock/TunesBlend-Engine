@@ -84,3 +84,29 @@ def arr_combine(arr1, arr2):
             combined_sub_arr.extend(sub_arr2)
         combined.append(combined_sub_arr)
     return combined
+
+
+
+"""
+Returns all unique genres present
+
+@param: an array of array of genres 
+@return: an array of every unique genre 
+"""
+def get_all_genres(array):
+    all_genres = list(set(genre for genres in array for genre in genres))
+    return sorted(all_genres)
+
+
+
+"""
+Converts nested array into nested json object
+"""
+def nested_array_to_json(audio_features, genre_list):
+    result = []
+    
+    for subarray in audio_features:
+        json_object = {genre: int(genre in subarray) for genre in genre_list}
+        result.append(json_object)
+    
+    return result
