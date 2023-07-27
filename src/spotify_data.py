@@ -125,7 +125,12 @@ def get_artist_genre(track_uris, sp):
 
 
 """
+Combines get_album_genres() and get_artist_genre() to generate unified genre
+* NOTE: as of 27/07/23, albums do NOT return any genres. So get_album_genres() removed for now, to save API calls
 
+@param playlist to generate list of genre of each track
+
+@return list of genre(s) of each track(s) in a list
 """
 def get_track_genre(playlist, sp):
     genre_list = []
@@ -155,12 +160,14 @@ def get_track_genre(playlist, sp):
     
     for i in range(0, len(track_uris), chunk_size):
         chunk = track_uris[i:i + chunk_size]
-        print(f"playlist {i}:{i+chunk_size} @ {datetime.datetime.now()}")
+        
+        pid = playlist['pid']
+        print(f"Playlist {pid} @ {datetime.datetime.now()}")
+        
         artist_genre_chunk = get_artist_genre(chunk, sp)
         album_genre_chunk = get_album_genre(chunk, sp)
         
         track_genre_chunk = arr_cleanup(arr_combine(artist_genre_chunk, album_genre_chunk))
-        pid = playlist['pid']
         for genre in track_genre_chunk:
             id = f"{pid}_{track_id}"
             # genre['id'] = id
