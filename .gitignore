@@ -4,3 +4,5 @@
 /venv
 *.pyc
 test.py
+__pycache__
+.cache
