@@ -82,7 +82,6 @@ Function to retreive the genre(s) of the album for one or multiple tracks.
 @return: list - The genre(s) of the album for the given track(s) in a list.
 """
 def get_album_genre(track_uris, sp):
-
     if not isinstance(track_uris, list):
         
         track_details = sp.track(track_uris)
@@ -109,7 +108,6 @@ Function to retrieve the genre(s) of the artist for one or multiple tracks.
 @return: The genre(s) of the artist for the given track(s) in a list.
 """
 def get_artist_genre(track_uris, sp):
-    
     if not isinstance(track_uris, list):
         
         track_details = sp.track(track_uris)
@@ -122,7 +120,6 @@ def get_artist_genre(track_uris, sp):
         track_details_list = sp.tracks(track_uris)
         artist_id_list = [track['artists'][0]['id'] for track in track_details_list['tracks']]
         artist_genre_list = [sp.artist(artist)['genres'] for artist in artist_id_list]
-
         return artist_genre_list
 
 
@@ -151,19 +148,19 @@ def get_track_genre(playlist, sp):
         current_time = datetime.datetime.now()
         status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
         send_telegram_message(status_update_message)
-
+    
+    # 50 is the limit for SpotiPy 
     chunk_size = 50
     track_id = 0
     
     for i in range(0, len(track_uris), chunk_size):
         chunk = track_uris[i:i + chunk_size]
-        print(f"playlist {i}:{i+chunk_size}")
+        print(f"playlist {i}:{i+chunk_size} @ {datetime.datetime.now()}")
         artist_genre_chunk = get_artist_genre(chunk, sp)
         album_genre_chunk = get_album_genre(chunk, sp)
         
         track_genre_chunk = arr_cleanup(arr_combine(artist_genre_chunk, album_genre_chunk))
         pid = playlist['pid']
-        print(pid)
         for genre in track_genre_chunk:
             id = f"{pid}_{track_id}"
             # genre['id'] = id
