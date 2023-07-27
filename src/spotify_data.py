@@ -136,6 +136,7 @@ def get_track_genre(playlist, sp):
     genre_list = []
     track_uris = get_track_uris(playlist)
     playlist_id = playlist['pid']
+    print(f'playlist {playlist["pid"]} at {datetime.datetime.now()}')
 
     """
     Setup GVP VM to handle large amounts of data cleanup.
@@ -143,7 +144,7 @@ def get_track_genre(playlist, sp):
     """
     if playlist_id % 100 == 0:
         current_time = datetime.datetime.now()
-        status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
+        status_update_message = f'WE`VE REACHED Playlist {playlist["pid"]} at {current_time}'
         print(status_update_message)
         send_message(status_update_message, chat_id_dev)
     
