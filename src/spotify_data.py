@@ -141,7 +141,7 @@ def get_track_genre(playlist, sp):
     Setup GVP VM to handle large amounts of data cleanup.
     Prints status every 100 playlist processed.
     """
-    if playlist_id % 100 == 0 and playlist_id != 0:
+    if playlist_id % 100 == 0:
         current_time = datetime.datetime.now()
         status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
         print(status_update_message)
@@ -152,8 +152,8 @@ def get_track_genre(playlist, sp):
     """        
     if playlist_id % 500 == 0 and playlist_id != 0:
         current_time = datetime.datetime.now()
-        status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
-        send_message(status_update_message)
+        status_update_message = f'IMPORTANT Begin processing playlist {playlist["pid"]} at {current_time}'
+        send_message(status_update_message, chat_id_dev)
     
     # 50 is the limit for SpotiPy 
     chunk_size = 50
