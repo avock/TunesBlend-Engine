@@ -119,61 +119,63 @@ Obtains average of each audio feature based on playlist
 @param: CSV containing audio feature of feach track within a playlist, and multiple playlists 
 @return: CSV containing average audio feature of each playlist
 """
-def get_playlist_average(source_csv_pathname, target_csv_pathname):
+def get_playlist_data(source_csv_pathname, target_csv_pathname):
     data = pd.read_csv(source_csv_pathname)
     grouped_data = data.groupby(data['id'].str.split('_').str[0])
     
     audio_features_data = grouped_data.agg({
-        'danceability': ['mean', 'min', 'max'],
-        'energy': ['mean', 'min', 'max'],
-        'key': ['mean', 'min', 'max'],
-        'loudness': ['mean', 'min', 'max'],
-        'speechiness': ['mean', 'min', 'max'],
-        'acousticness': ['mean', 'min', 'max'],
-        'instrumentalness': ['mean', 'min', 'max'],
-        'liveness': ['mean', 'min', 'max'],
-        'valence': ['mean', 'min', 'max'],
-        'tempo': ['mean', 'min', 'max'],
-        'duration_ms': ['mean', 'min', 'max']
+        'danceability': ['mean', lambda x: x.quantile(0.25), lambda x: x.quantile(0.75)],
+        'energy': ['mean', lambda x: x.quantile(0.25), lambda x: x.quantile(0.75)],
+        'key': ['mean', lambda x: x.quantile(0.25), lambda x: x.quantile(0.75)],
+        'loudness': ['mean', lambda x: x.quantile(0.25), lambda x: x.quantile(0.75)],
+        'speechiness': ['mean', lambda x: x.quantile(0.25), lambda x: x.quantile(0.75)],
+        'acousticness': ['mean', lambda x: x.quantile(0.25), lambda x: x.quantile(0.75)],
+        'instrumentalness': ['mean', lambda x: x.quantile(0.25), lambda x: x.quantile(0.75)],
+        'liveness': ['mean', lambda x: x.quantile(0.25), lambda x: x.quantile(0.75)],
+        'valence': ['mean', lambda x: x.quantile(0.25), lambda x: x.quantile(0.75)],
+        'tempo': ['mean', lambda x: x.quantile(0.25), lambda x: x.quantile(0.75)],
+        'duration_ms': ['mean', lambda x: x.quantile(0.25), lambda x: x.quantile(0.75)]
     })
+
     
     audio_features_data.reset_index(inplace=True)
     
     new_data = pd.DataFrame({
         'id': audio_features_data.index,
-        'danceability_min': audio_features_data[('danceability', 'min')],
-        'danceability_max': audio_features_data[('danceability', 'max')],
         'danceability_mean': audio_features_data[('danceability', 'mean')],
-        'energy_min': audio_features_data[('energy', 'min')],
-        'energy_max': audio_features_data[('energy', 'max')],
+        'danceability_low': audio_features_data[('danceability', '<lambda_0>')],
+        'danceability_high': audio_features_data[('danceability', '<lambda_1>')],
         'energy_mean': audio_features_data[('energy', 'mean')],
-        'key_min': audio_features_data[('key', 'min')],
-        'key_max': audio_features_data[('key', 'max')],
+        'energy_low': audio_features_data[('energy', '<lambda_0>')],
+        'energy_high': audio_features_data[('energy', '<lambda_1>')],
         'key_mean': audio_features_data[('key', 'mean')],
-        'loudness_min': audio_features_data[('loudness', 'min')],
-        'loudness_max': audio_features_data[('loudness', 'max')],
+        'key_low': audio_features_data[('key', '<lambda_0>')],
+        'key_high': audio_features_data[('key', '<lambda_1>')],
         'loudness_mean': audio_features_data[('loudness', 'mean')],
-        'speechiness_min': audio_features_data[('speechiness', 'min')],
-        'speechiness_max': audio_features_data[('speechiness', 'max')],
+        'loudness_low': audio_features_data[('loudness', '<lambda_0>')],
+        'loudness_high': audio_features_data[('loudness', '<lambda_1>')],
         'speechiness_mean': audio_features_data[('speechiness', 'mean')],
-        'acousticness_min': audio_features_data[('acousticness', 'min')],
-        'acousticness_max': audio_features_data[('acousticness', 'max')],
+        'speechiness_low': audio_features_data[('speechiness', '<lambda_0>')],
+        'speechiness_high': audio_features_data[('speechiness', '<lambda_1>')],
         'acousticness_mean': audio_features_data[('acousticness', 'mean')],
-        'instrumentalness_min': audio_features_data[('instrumentalness', 'min')],
-        'instrumentalness_max': audio_features_data[('instrumentalness', 'max')],
+        'acousticness_low': audio_features_data[('acousticness', '<lambda_0>')],
+        'acousticness_high': audio_features_data[('acousticness', '<lambda_1>')],
         'instrumentalness_mean': audio_features_data[('instrumentalness', 'mean')],
-        'liveness_min': audio_features_data[('liveness', 'min')],
-        'liveness_max': audio_features_data[('liveness', 'max')],
+        'instrumentalness_low': audio_features_data[('instrumentalness', '<lambda_0>')],
+        'instrumentalness_high': audio_features_data[('instrumentalness', '<lambda_1>')],
         'liveness_mean': audio_features_data[('liveness', 'mean')],
-        'valence_min': audio_features_data[('valence', 'min')],
-        'valence_max': audio_features_data[('valence', 'max')],
+        'liveness_low': audio_features_data[('liveness', '<lambda_0>')],
+        'liveness_high': audio_features_data[('liveness', '<lambda_1>')],
         'valence_mean': audio_features_data[('valence', 'mean')],
-        'tempo_min': audio_features_data[('tempo', 'min')],
-        'tempo_max': audio_features_data[('tempo', 'max')],
+        'valence_low': audio_features_data[('valence', '<lambda_0>')],
+        'valence_high': audio_features_data[('valence', '<lambda_1>')],
         'tempo_mean': audio_features_data[('tempo', 'mean')],
-        'duration_ms_min': audio_features_data[('duration_ms', 'min')],
-        'duration_ms_max': audio_features_data[('duration_ms', 'max')],
-        'duration_ms_mean': audio_features_data[('duration_ms', 'mean')]
+        'tempo_low': audio_features_data[('tempo', '<lambda_0>')],
+        'tempo_high': audio_features_data[('tempo', '<lambda_1>')],
+        'duration_ms_mean': audio_features_data[('duration_ms', 'mean')],
+        'duration_ms_low': audio_features_data[('duration_ms', '<lambda_0>')],
+        'duration_ms_high': audio_features_data[('duration_ms', '<lambda_1>')]
     })
+
 
     new_data.to_csv(target_csv_pathname, index=False)

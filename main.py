@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from src.data_processing import *
 from src.spotify_data import *
 from src.telegram_bot import *
+from utils import *
 
 
 load_dotenv()
@@ -23,22 +24,12 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
 audio_features = []
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-# loops through all 10 raw_data_files
-for i in range(9, 10):
+"""
+Module initializer
+"""
 
-    relative_raw_data_path = f'data/raw_data/mpd.slice.{i*1000}-{(i+1)*1000 - 1}.json'
-    raw_data_path = os.path.join(current_dir, relative_raw_data_path)
-    
-    relative_processed_data_path = f'data/processed_data/clean-data_{i*1000}-{(i+1)*1000 - 1}.csv'
-    processed_data_path = os.path.join(current_dir, relative_processed_data_path)
-    
-    json_data = read_data(raw_data_path)
-    for playlist in json_data['playlists']:
-        audio_features_list = get_playlist_audio_features(playlist, sp)
+def main():
+    spotify_api_test()
 
-        audio_features.extend(audio_features_list)
-
-    write_data(audio_features, processed_data_path)
-
-    # Reset audio_features_list for the next raw_data_file
-    audio_features = []
+if __name__ == "__main__":
+    main()
