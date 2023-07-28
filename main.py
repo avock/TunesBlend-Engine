@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 from src.data_processing import *
 from src.spotify_data import *
-from src.misc import *
+from src.telegram_bot import *
 
 
 load_dotenv()
@@ -24,7 +24,7 @@ audio_features = []
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # loops through all 10 raw_data_files
-for i in range(5, 10):
+for i in range(9, 10):
 
     relative_raw_data_path = f'data/raw_data/mpd.slice.{i*1000}-{(i+1)*1000 - 1}.json'
     raw_data_path = os.path.join(current_dir, relative_raw_data_path)

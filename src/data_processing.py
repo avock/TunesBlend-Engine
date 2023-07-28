@@ -110,3 +110,70 @@ def nested_array_to_json(audio_features, genre_list):
         result.append(json_object)
     
     return result
+
+
+
+"""
+Obtains average of each audio feature based on playlist
+
+@param: CSV containing audio feature of feach track within a playlist, and multiple playlists 
+@return: CSV containing average audio feature of each playlist
+"""
+def get_playlist_average(source_csv_pathname, target_csv_pathname):
+    data = pd.read_csv(source_csv_pathname)
+    grouped_data = data.groupby(data['id'].str.split('_').str[0])
+    
+    audio_features_data = grouped_data.agg({
+        'danceability': ['mean', 'min', 'max'],
+        'energy': ['mean', 'min', 'max'],
+        'key': ['mean', 'min', 'max'],
+        'loudness': ['mean', 'min', 'max'],
+        'speechiness': ['mean', 'min', 'max'],
+        'acousticness': ['mean', 'min', 'max'],
+        'instrumentalness': ['mean', 'min', 'max'],
+        'liveness': ['mean', 'min', 'max'],
+        'valence': ['mean', 'min', 'max'],
+        'tempo': ['mean', 'min', 'max'],
+        'duration_ms': ['mean', 'min', 'max']
+    })
+    
+    audio_features_data.reset_index(inplace=True)
+    
+    new_data = pd.DataFrame({
+        'id': audio_features_data.index,
+        'danceability_min': audio_features_data[('danceability', 'min')],
+        'danceability_max': audio_features_data[('danceability', 'max')],
+        'danceability_mean': audio_features_data[('danceability', 'mean')],
+        'energy_min': audio_features_data[('energy', 'min')],
+        'energy_max': audio_features_data[('energy', 'max')],
+        'energy_mean': audio_features_data[('energy', 'mean')],
+        'key_min': audio_features_data[('key', 'min')],
+        'key_max': audio_features_data[('key', 'max')],
+        'key_mean': audio_features_data[('key', 'mean')],
+        'loudness_min': audio_features_data[('loudness', 'min')],
+        'loudness_max': audio_features_data[('loudness', 'max')],
+        'loudness_mean': audio_features_data[('loudness', 'mean')],
+        'speechiness_min': audio_features_data[('speechiness', 'min')],
+        'speechiness_max': audio_features_data[('speechiness', 'max')],
+        'speechiness_mean': audio_features_data[('speechiness', 'mean')],
+        'acousticness_min': audio_features_data[('acousticness', 'min')],
+        'acousticness_max': audio_features_data[('acousticness', 'max')],
+        'acousticness_mean': audio_features_data[('acousticness', 'mean')],
+        'instrumentalness_min': audio_features_data[('instrumentalness', 'min')],
+        'instrumentalness_max': audio_features_data[('instrumentalness', 'max')],
+        'instrumentalness_mean': audio_features_data[('instrumentalness', 'mean')],
+        'liveness_min': audio_features_data[('liveness', 'min')],
+        'liveness_max': audio_features_data[('liveness', 'max')],
+        'liveness_mean': audio_features_data[('liveness', 'mean')],
+        'valence_min': audio_features_data[('valence', 'min')],
+        'valence_max': audio_features_data[('valence', 'max')],
+        'valence_mean': audio_features_data[('valence', 'mean')],
+        'tempo_min': audio_features_data[('tempo', 'min')],
+        'tempo_max': audio_features_data[('tempo', 'max')],
+        'tempo_mean': audio_features_data[('tempo', 'mean')],
+        'duration_ms_min': audio_features_data[('duration_ms', 'min')],
+        'duration_ms_max': audio_features_data[('duration_ms', 'max')],
+        'duration_ms_mean': audio_features_data[('duration_ms', 'mean')]
+    })
+
+    new_data.to_csv(target_csv_pathname, index=False)
