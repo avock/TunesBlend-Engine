@@ -53,7 +53,7 @@ def get_playlist_audio_features(playlist, sp):
     if playlist_id % 500 == 0 and playlist_id != 0:
         current_time = datetime.datetime.now()
         status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
-        send_telegram_message(status_update_message)
+        send_message(status_update_message)
 
     chunk_size = 50
     track_id = 0
