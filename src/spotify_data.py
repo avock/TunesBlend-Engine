@@ -11,18 +11,10 @@ Spotify Constants
 """
 genre_list = ['acoustic', 'afrobeat', 'alt-rock', 'alternative', 'ambient', 'anime', 'black-metal', 'bluegrass', 'blues', 'bossanova', 'brazil', 'breakbeat', 'british', 'cantopop', 'chicago-house', 'children', 'chill', 'classical', 'club', 'comedy', 'country', 'dance', 'dancehall', 'death-metal', 'deep-house', 'detroit-techno', 'disco', 'disney', 'drum-and-bass', 'dub', 'dubstep', 'edm', 'electro', 'electronic', 'emo', 'folk', 'forro', 'french', 'funk', 'garage', 'german', 'gospel', 'goth', 'grindcore', 'groove', 'grunge', 'guitar', 'happy', 'hard-rock', 'hardcore', 'hardstyle', 'heavy-metal', 'hip-hop', 'holidays', 'honky-tonk', 'house', 'idm', 'indian', 'indie', 'indie-pop', 'industrial', 'iranian', 'j-dance', 'j-idol', 'j-pop', 'j-rock', 'jazz', 'k-pop', 'kids', 'latin', 'latino', 'malay', 'mandopop', 'metal', 'metal-misc', 'metalcore', 'minimal-techno', 'movies', 'mpb', 'new-age', 'new-release', 'opera', 'pagode', 'party', 'philippines-opm', 'piano', 'pop', 'pop-film', 'post-dubstep', 'power-pop', 'progressive-house', 'psych-rock', 'punk', 'punk-rock', 'r-n-b', 'rainy-day', 'reggae', 'reggaeton', 'road-trip', 'rock', 'rock-n-roll', 'rockabilly', 'romance', 'sad', 'salsa', 'samba', 'sertanejo', 'show-tunes', 'singer-songwriter', 'ska', 'sleep', 'songwriter', 'soul', 'soundtracks', 'spanish', 'study', 'summer', 'swedish', 'synth-pop', 'tango', 'techno', 'trance', 'trip-hop', 'turkish', 'work-out', 'world-music']
 
-
-
-"""
-Function to retrieve audio_features of a track
-
-"""
 def get_audio_features(track_uris, sp):
     audio_features = sp.audio_features(track_uris)
     filtered_audio_features = [filter_audio_feature(audio_feature) for audio_feature in audio_features]
     return filtered_audio_features
-
-
 
 """
 Function to retreive the genre(s) of the album for one or multiple tracks.
@@ -42,8 +34,6 @@ def get_album_genre(track_uris, sp):
         album_genre_list = [sp.album(album)['genres'] for album in album_id_list]
 
         return album_genre_list
-
-
 
 """
 Function to retrieve the genre(s) of the artist for one or multiple tracks.
@@ -76,6 +66,48 @@ def get_user_playlists(sp):
         playlist_list.append(playlist_detail)
     
     return playlist_list
+
+'''
+Returns an array of tracks with the following format:
+    ```
+     {'track_idx': 214,
+    'track_name': '記得',
+    'track_album': '真實 (Remastered)',
+    'track_artist': 'A-Mei Chang',
+    'track_uri': 'spotify:track:7sQH1uCHZeNcmyTUXkuCIL',
+    'track_href': 'https://open.spotify.com/track/7sQH1uCHZeNcmyTUXkuCIL'}
+    ```
+'''
+def get_playlist_tracks(sp, playlist_uri='spotify:playlist:6FS0wzsoprqRG9PAFsmVSz'):
+    
+    response = sp.playlist_tracks(playlist_uri, offset=0, limit=100)
+    
+    playlist_track_count = response['total']
+    
+    offset = 0
+    tracks = []
+    while offset < playlist_track_count:
+        tracks_list = sp.playlist_tracks(playlist_uri, offset=offset, limit=100)['items']
+        if not tracks_list:
+            break
+        tracks.extend(tracks_list)
+        offset += 100
+    
+    track_list = []
+    
+    for idx, track in enumerate(tracks, start=1):
+        track = track['track']
+        track_info = {
+            'track_idx': idx,
+            'track_name': track['name'],
+            'track_album': track['album']['name'],
+            'track_artist': track['artists'][0]['name'],
+            'track_uri': track['uri'],
+            'track_href': track['external_urls']['spotify']
+        }
+        track_list.append(track_info)
+    
+    return track_list
 
 def get_user_top_tracks(sp, limit=10, offset=0, range='long_term'):
     valid_ranges = ['short_term', 'medium_term', 'long_term']
