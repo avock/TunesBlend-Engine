@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from src.data_processing import *
 from src.spotify_data import *
 from src.telegram_bot import *
+from src.spotify_utils import *
 from utils import *
 
 
@@ -16,10 +17,12 @@ SpotiPy instance to fetch authenticate connection to Spotify API
 client_id = os.getenv('CLIENT_ID')
 client_secret = os.getenv('CLIENT_SECRET')
 
+spotify_scopes = "playlist-read-private playlist-modify-private playlist-modify-public user-read-recently-played user-top-read user-library-modify"
+
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                client_secret=client_secret,
                                                redirect_uri="http://localhost:8000/callback",
-                                               scope="user-library-read user-top-read"))
+                                               scope=spotify_scopes))
 
 audio_features = []
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -29,7 +32,7 @@ Module initializer
 """
 
 def main():
-    pprint.pprint(get_user_top_tracks(sp))
+    pprint.pprint(get_user_playlists(sp))
 
 if __name__ == "__main__":
     main()

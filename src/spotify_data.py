@@ -2,6 +2,7 @@ import datetime, pprint
 
 from src.data_processing import *
 from src.telegram_bot import *
+from src.spotify_utils import *
 
 
 
@@ -15,9 +16,6 @@ genre_list = ['acoustic', 'afrobeat', 'alt-rock', 'alternative', 'ambient', 'ani
 """
 Function to retrieve audio_features of a track
 
-@param: Spotify Track URI
-@return: Json object of target track's complete + filtered audio_features
-
 """
 def get_audio_features(track_uris, sp):
     audio_features = sp.audio_features(track_uris)
@@ -27,59 +25,7 @@ def get_audio_features(track_uris, sp):
 
 
 """
-Function to retrieve audio_features of every track in a playlist
-
-@param: a playlist JSON object 
-@return: Array of track_uri with globally unique identifier
-"""
-def get_playlist_audio_features(playlist, sp):
-    
-    audio_features_list = []
-    track_uris = get_track_uris(playlist)
-    playlist_id = playlist['pid']
-
-    """
-    Setup GVP VM to handle large amounts of data cleanup.
-    Prints status every 100 playlist processed.
-    """
-    if playlist_id % 100 == 0:
-        current_time = datetime.datetime.now()
-        status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
-        print(status_update_message)
-    
-    """
-    Setup Telegram Bot to send status update every 500 playlist processed.
-    """        
-    if playlist_id % 500 == 0 and playlist_id != 0:
-        current_time = datetime.datetime.now()
-        status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
-        send_message(status_update_message)
-
-    chunk_size = 50
-    track_id = 0
-    
-    for i in range(0, len(track_uris), chunk_size):
-        chunk = track_uris[i:i + chunk_size]
-        audio_features_chunk = get_audio_features(chunk, sp)
-
-        pid = playlist['pid']
-        for audio_feature in audio_features_chunk:
-            id = f"{pid}_{track_id}"
-            audio_feature['id'] = id
-            audio_features_list.append(audio_feature)
-            track_id += 1
-
-    return audio_features_list
-
-
-
-"""
 Function to retreive the genre(s) of the album for one or multiple tracks.
-
-@param track_uris: str or list - The track URI(s) for which to retrieve the genre(s).
-@param sp: Spotipy object - The Spotipy client object for making API calls.
-
-@return: list - The genre(s) of the album for the given track(s) in a list.
 """
 def get_album_genre(track_uris, sp):
     if not isinstance(track_uris, list):
@@ -101,11 +47,6 @@ def get_album_genre(track_uris, sp):
 
 """
 Function to retrieve the genre(s) of the artist for one or multiple tracks.
-
-@param track_uris: str or list - The track URI(s) for which to retrieve the genre(s).
-@param sp: Spotipy object - The Spotipy client object for making API calls.
-
-@return: The genre(s) of the artist for the given track(s) in a list.
 """
 def get_artist_genre(track_uris, sp):
     if not isinstance(track_uris, list):
@@ -122,80 +63,16 @@ def get_artist_genre(track_uris, sp):
         artist_genre_list = [sp.artist(artist)['genres'] for artist in artist_id_list]
         return artist_genre_list
 
-
-
-"""
-Combines get_album_genres() and get_artist_genre() to generate unified genre
-* NOTE: as of 27/07/23, albums do NOT return any genres. So get_album_genres() removed for now, to save API calls
-
-@param playlist to generate list of genre of each track
-
-@return list of genre(s) of each track(s) in a list
-"""
-def get_track_genre(playlist, sp):
-    genre_list = []
-    track_uris = get_track_uris(playlist)
-    playlist_id = playlist['pid']
-    print(f'playlist {playlist["pid"]} at {datetime.datetime.now()}')
-
-    """
-    Setup GVP VM to handle large amounts of data cleanup.
-    Prints status every 100 playlist processed.
-    """
-    if playlist_id % 100 == 0:
-        current_time = datetime.datetime.now()
-        status_update_message = f'WE`VE REACHED Playlist {playlist["pid"]} at {current_time}'
-        print(status_update_message)
-        send_message(status_update_message, chat_id_dev)
+def get_user_playlists(sp):
+    playlists = sp.current_user_playlists()['items']
+    playlist_list = []
+    for playlist in playlists:
+        playlist_detail = {
+            'playlist_name' : playlist['name'],
+            'playlist_id': playlist['id'],
+            'playlist_track_count': playlist['tracks']['total']
+        }
+        playlist_list.append(playlist_detail)
     
-    """
-    Setup Telegram Bot to send status update every 500 playlist processed.
-    """        
-    if playlist_id % 500 == 0 and playlist_id != 0:
-        current_time = datetime.datetime.now()
-        status_update_message = f'IMPORTANT Begin processing playlist {playlist["pid"]} at {current_time}'
-        send_message(status_update_message, chat_id_dev)
-    
-    # 50 is the limit for SpotiPy 
-    chunk_size = 50
-    track_id = 0
-    
-    for i in range(0, len(track_uris), chunk_size):
-        chunk = track_uris[i:i + chunk_size]
-        
-        artist_genre_chunk = get_artist_genre(chunk, sp)
-        
-        """
-        * NOTE: as of 27/07/23, albums do NOT return any genres. So get_album_genres() removed for now, to reduce spotify API calls
-        """
-        # album_genre_chunk = get_album_genre(chunk, sp)
-        # track_genre_chunk = arr_cleanup(arr_combine(artist_genre_chunk, album_genre_chunk))
-        track_genre_chunk = artist_genre_chunk
-        
-        for genre in track_genre_chunk:
-            id = f"{playlist_id}_{track_id}"
-            # genre['id'] = id
-            genre_list.append(genre)
-            track_id += 1
+    return playlist_list
 
-    return genre_list
-
-
-"""
-Returns top X songs for a user
-"""
-def get_user_top_tracks(sp, limit=10, offset=0, range='long_term'):
-    
-    top_tracks = []
-    try:
-        results = sp.current_user_top_tracks(limit=limit, offset=offset, time_range=range)
-        for track_info in results['items']:
-            track_id = track_info['id']
-            track_name = track_info['name']
-            artist_name = track_info['artists'][0]['name']  # Assuming only one artist per track
-            artist_track = f"{artist_name} : {track_name}, {track_id}"
-            top_tracks.append(artist_track)
-    except spotipy.exceptions.SpotifyException as e:
-        print(f"Error: {e}")
-    
-    return top_tracks

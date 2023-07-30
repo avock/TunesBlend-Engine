@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from src.data_processing import *
 from src.spotify_data import *
 from src.telegram_bot import *
+from src.spotify_utils import *
 
 
 load_dotenv()
