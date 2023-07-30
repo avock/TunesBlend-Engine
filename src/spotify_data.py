@@ -179,3 +179,23 @@ def get_track_genre(playlist, sp):
             track_id += 1
 
     return genre_list
+
+
+"""
+Returns top X songs for a user
+"""
+def get_user_top_tracks(sp, limit=10, offset=0, range='long_term'):
+    
+    top_tracks = []
+    try:
+        results = sp.current_user_top_tracks(limit=limit, offset=offset, time_range=range)
+        for track_info in results['items']:
+            track_id = track_info['id']
+            track_name = track_info['name']
+            artist_name = track_info['artists'][0]['name']  # Assuming only one artist per track
+            artist_track = f"{artist_name} : {track_name}, {track_id}"
+            top_tracks.append(artist_track)
+    except spotipy.exceptions.SpotifyException as e:
+        print(f"Error: {e}")
+    
+    return top_tracks
