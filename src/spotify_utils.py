@@ -110,3 +110,9 @@ def get_track_genre(playlist, sp):
     return genre_list
 
 
+
+"""
+
+"""
+def get_playlist_top_tracks(playlist_uri, track_count, sp):
+    pass    
