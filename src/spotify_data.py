@@ -78,6 +78,9 @@ def get_user_playlists(sp):
     return playlist_list
 
 def get_user_top_tracks(sp, limit=10, offset=0, range='long_term'):
+    valid_ranges = ['short_term', 'medium_term', 'long_term']
+    if range not in valid_ranges:
+        raise ValueError('Value of range must be short_term (4 weeks), medium_term (6 months) or long_term (all time)')
     
     top_tracks = []
     try:
