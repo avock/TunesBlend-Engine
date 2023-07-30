@@ -109,9 +109,18 @@ def get_track_genre(playlist, sp):
 
     return genre_list
 
+
+
+
+"""
+Retrieves the total number of tracks a user has over each playlist
+"""
 def get_user_total_tracks(sp):
     user_playlists = get_user_playlists(sp)
     total_track_count = 0
     for playlist in user_playlists:
         total_track_count += playlist['playlist_track_count']
     return total_track_count
+
+def get_playlist_top_tracks(sp, playlist_uri, track_count = 10):
+    playlist_tracks = get_playlist_tracks(playlist_uri, sp)

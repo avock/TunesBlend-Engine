@@ -120,12 +120,21 @@ def get_playlist_tracks(sp, playlist_uri='spotify:playlist:6FS0wzsoprqRG9PAFsmVS
         }
         track_list.append(track_info)
     
+    track_list = {
+        'tracks': track_list,
+        'track_count': playlist_track_count,
+    }
+    
     return track_list
+
 
 def get_user_top_tracks(sp, limit=10, offset=0, range='long_term'):
     valid_ranges = ['short_term', 'medium_term', 'long_term']
     if range not in valid_ranges:
         raise ValueError('Value of range must be short_term (4 weeks), medium_term (6 months) or long_term (all time)')
+    
+    if limit > 50:
+        raise ValueError('Value of limit must be less than 50')
     
     top_tracks = []
     try:

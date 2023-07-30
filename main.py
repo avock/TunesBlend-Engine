@@ -32,7 +32,7 @@ Module initializer
 """
 
 def main():
-    print(get_user_total_tracks(sp))
+    pr.pprint(get_user_top_tracks(sp, limit=100), sort_dicts=False)
 
 if __name__ == "__main__":
     main()
