@@ -69,10 +69,31 @@ def get_user_playlists(sp):
     for playlist in playlists:
         playlist_detail = {
             'playlist_name' : playlist['name'],
-            'playlist_id': playlist['id'],
+            'playlist_uri': playlist['uri'],
+            'playlist_href': playlist['external_urls']['spotify'],
             'playlist_track_count': playlist['tracks']['total']
         }
         playlist_list.append(playlist_detail)
     
     return playlist_list
 
+def get_user_top_tracks(sp, limit=10, offset=0, range='long_term'):
+    
+    top_tracks = []
+    try:
+        track_list = sp.current_user_top_tracks(limit=limit, offset=offset, time_range=range)['items']
+        
+        for idx, track in enumerate(track_list, start=1):
+            track_info = {
+                'track_rank': idx,
+                'track_name': track['name'],
+                'track_artist': track['artists'][0]['name'],
+                'track_uri': track['uri'],
+                'track_href': track['external_urls']['spotify']
+            }    
+            top_tracks.append(track_info)
+            
+    except Exception as e:
+        print(f"Error: {e}")
+    
+    return top_tracks
