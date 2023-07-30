@@ -78,7 +78,7 @@ def get_user_playlists(sp):
 
 
 
-'''
+"""
 Returns an array of tracks in the following format:
     ```
      {
@@ -90,7 +90,7 @@ Returns an array of tracks in the following format:
         'track_href': 'https://open.spotify.com/track/7sQH1uCHZeNcmyTUXkuCIL'
     }
     ```
-'''
+"""
 def get_playlist_tracks(sp, playlist_uri='spotify:playlist:6FS0wzsoprqRG9PAFsmVSz'):
     
     response = sp.playlist_tracks(playlist_uri, offset=0, limit=100)
@@ -127,10 +127,21 @@ def get_playlist_tracks(sp, playlist_uri='spotify:playlist:6FS0wzsoprqRG9PAFsmVS
     
     return track_list
 
-
-def get_user_top_tracks(sp, limit=10, offset=0, range='long_term'):
-    valid_ranges = ['short_term', 'medium_term', 'long_term']
-    if range not in valid_ranges:
+"""
+Returns an array of tracks in the following format:
+    ```
+    {
+        'track_rank': 50,
+        'track_name': 'Say Something',
+        'track_artist': 'Kodaline',
+        'track_uri': 'spotify:track:24rLBEqQCaNCRMwDWRaebk',
+        'track_href': 'https://open.spotify.com/track/24rLBEqQCaNCRMwDWRaebk'
+    }
+    ```
+"""
+def get_user_top_tracks(sp, limit=50, offset=0, time_range='long_term'):
+    valid_time_ranges = ['short_term', 'medium_term', 'long_term']
+    if time_range not in valid_time_ranges:
         raise ValueError('Value of range must be short_term (4 weeks), medium_term (6 months) or long_term (all time)')
     
     if limit > 50:
@@ -138,7 +149,7 @@ def get_user_top_tracks(sp, limit=10, offset=0, range='long_term'):
     
     top_tracks = []
     try:
-        track_list = sp.current_user_top_tracks(limit=limit, offset=offset, time_range=range)['items']
+        track_list = sp.current_user_top_tracks(limit=limit, offset=offset, time_range=time_range)['items']
         
         for idx, track in enumerate(track_list, start=1):
             track_info = {
