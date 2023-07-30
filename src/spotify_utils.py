@@ -2,7 +2,7 @@ import datetime, pprint
 
 from src.data_processing import *
 from src.telegram_bot import *
-from src.spotify_utils import *
+from src.spotify_data import *
 
 
 
@@ -109,10 +109,9 @@ def get_track_genre(playlist, sp):
 
     return genre_list
 
-
-
-"""
-
-"""
-def get_playlist_top_tracks(playlist_uri, track_count, sp):
-    pass    
+def get_user_total_tracks(sp):
+    user_playlists = get_user_playlists(sp)
+    total_track_count = 0
+    for playlist in user_playlists:
+        total_track_count += playlist['playlist_track_count']
+    return total_track_count

@@ -2,8 +2,6 @@ import datetime, pprint
 
 from src.data_processing import *
 from src.telegram_bot import *
-from src.spotify_utils import *
-
 
 
 """
@@ -53,6 +51,17 @@ def get_artist_genre(track_uris, sp):
         artist_genre_list = [sp.artist(artist)['genres'] for artist in artist_id_list]
         return artist_genre_list
 
+"""
+Returns an array of playlists in the following format:
+    ```
+     {  
+        'playlist_name': '//日本語  🇯🇵',
+        'playlist_uri': 'spotify:playlist:0AfGrhDpHs17mj7pHeScPZ',
+        'playlist_href': 'https://open.spotify.com/playlist/0AfGrhDpHs17mj7pHeScPZ',
+        'playlist_track_count': 4
+    }
+    ```
+"""
 def get_user_playlists(sp):
     playlists = sp.current_user_playlists()['items']
     playlist_list = []
@@ -67,15 +76,19 @@ def get_user_playlists(sp):
     
     return playlist_list
 
+
+
 '''
-Returns an array of tracks with the following format:
+Returns an array of tracks in the following format:
     ```
-     {'track_idx': 214,
-    'track_name': '記得',
-    'track_album': '真實 (Remastered)',
-    'track_artist': 'A-Mei Chang',
-    'track_uri': 'spotify:track:7sQH1uCHZeNcmyTUXkuCIL',
-    'track_href': 'https://open.spotify.com/track/7sQH1uCHZeNcmyTUXkuCIL'}
+     {
+        'track_idx': 214,
+        'track_name': '記得',
+        'track_album': '真實 (Remastered)',
+        'track_artist': 'A-Mei Chang',
+        'track_uri': 'spotify:track:7sQH1uCHZeNcmyTUXkuCIL',
+        'track_href': 'https://open.spotify.com/track/7sQH1uCHZeNcmyTUXkuCIL'
+    }
     ```
 '''
 def get_playlist_tracks(sp, playlist_uri='spotify:playlist:6FS0wzsoprqRG9PAFsmVSz'):
