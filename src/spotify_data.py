@@ -181,6 +181,11 @@ def get_user_top_tracks(sp, limit=50, offset=0, time_range='long_term'):
     
     return top_tracks
 
+
+
+"""
+
+"""
 def get_spotify_recommendation(sp, limit=10, seed_artists=None, seed_genres=None, seed_tracks=None, country=None):
     recommended_tracks = sp.recommendations(limit=limit, seed_artists=seed_artists, seed_genres=seed_genres, seed_tracks=seed_tracks, country=country)
     cleaned_recommended_tracks = []
@@ -189,10 +194,13 @@ def get_spotify_recommendation(sp, limit=10, seed_artists=None, seed_genres=None
         track_info = {
             'track_rank': idx,
             'track_name': track['name'],
-            'track_artist': track['artists'][0]['name'],
             'track_uri': track['uri'],
-            'track_href': track['external_urls']['spotify']
+            'track_href': track['external_urls']['spotify'],
+            'artist': track['artists'][0]['name'],
+            'artist_uri': 'spotify:artist:64KEffDW9EtZ1y2vBYgq8T',
+            'album': 'Alone',
+            'album_uri': 'spotify:album:7ePC9qS9mSOTY9E0YPP6yg'
         }
-        cleaned_recommended_tracks.extend(track_info)
+        cleaned_recommended_tracks.append(track_info)
         
-    return recommended_tracks
+    return cleaned_recommended_tracks
