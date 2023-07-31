@@ -79,15 +79,22 @@ def get_user_playlists(sp):
 
 
 """
-Returns an array of tracks in the following format:
+Returns the following:
     ```
-     {
-        'track_idx': 214,
-        'track_name': '記得',
-        'track_album': '真實 (Remastered)',
-        'track_artist': 'A-Mei Chang',
-        'track_uri': 'spotify:track:7sQH1uCHZeNcmyTUXkuCIL',
-        'track_href': 'https://open.spotify.com/track/7sQH1uCHZeNcmyTUXkuCIL'
+    {
+        'track_count' = TRACK_COUNT,
+        'tracks' = [
+            {
+                'track_idx': 48,
+                'track_name': 'Pompeii / Viva la Vida',
+                'track_uri': 'spotify:track:1FOc6SLE7tFX0qeUx7WkPB',
+                'track_href': 'https://open.spotify.com/track/1FOc6SLE7tFX0qeUx7WkPB',
+                'artist': 'The Originals',
+                'artist_uri': 'spotify:artist:2AQZTl6fUg5Ma83948E5S9',
+                'album': 'Twenty Year Album',
+                'album_uri': 'spotify:album:14zHan6dut5XvGFCmSNQIS'
+            }, 
+        ]
     }
     ```
 """
@@ -113,16 +120,18 @@ def get_playlist_tracks(sp, playlist_uri='spotify:playlist:6FS0wzsoprqRG9PAFsmVS
         track_info = {
             'track_idx': idx,
             'track_name': track['name'],
-            'track_album': track['album']['name'],
-            'track_artist': track['artists'][0]['name'],
             'track_uri': track['uri'],
-            'track_href': track['external_urls']['spotify']
+            'track_href': track['external_urls']['spotify'],
+            'artist': track['artists'][0]['name'],
+            'artist_uri': track['artists'][0]['uri'],
+            'album': track['album']['name'],
+            'album_uri': track['album']['uri'],
         }
         track_list.append(track_info)
     
     track_list = {
-        'tracks': track_list,
         'track_count': playlist_track_count,
+        'tracks': track_list,
     }
     
     return track_list
@@ -131,11 +140,14 @@ def get_playlist_tracks(sp, playlist_uri='spotify:playlist:6FS0wzsoprqRG9PAFsmVS
 Returns an array of tracks in the following format:
     ```
     {
-        'track_rank': 50,
-        'track_name': 'Say Something',
-        'track_artist': 'Kodaline',
-        'track_uri': 'spotify:track:24rLBEqQCaNCRMwDWRaebk',
-        'track_href': 'https://open.spotify.com/track/24rLBEqQCaNCRMwDWRaebk'
+        'track_rank': 1,
+        'track_name': 'Alone',
+        'track_uri': 'spotify:track:3MEYFivt6bilQ9q9mFWZ4g',
+        'track_href': 'https://open.spotify.com/track/3MEYFivt6bilQ9q9mFWZ4g',
+        'artist': 'Marshmello',
+        'artist_uri': 'spotify:artist:64KEffDW9EtZ1y2vBYgq8T',
+        'album': 'Alone',
+        'album_uri': 'spotify:album:7ePC9qS9mSOTY9E0YPP6yg'
     }
     ```
 """
@@ -155,9 +167,12 @@ def get_user_top_tracks(sp, limit=50, offset=0, time_range='long_term'):
             track_info = {
                 'track_rank': idx,
                 'track_name': track['name'],
-                'track_artist': track['artists'][0]['name'],
                 'track_uri': track['uri'],
-                'track_href': track['external_urls']['spotify']
+                'track_href': track['external_urls']['spotify'],
+                'artist': track['artists'][0]['name'],
+                'artist_uri': track['artists'][0]['uri'],
+                'album': track['album']['name'],
+                'album_uri': track['album']['uri'],
             }    
             top_tracks.append(track_info)
             
@@ -165,3 +180,19 @@ def get_user_top_tracks(sp, limit=50, offset=0, time_range='long_term'):
         print(f"Error: {e}")
     
     return top_tracks
+
+def get_spotify_recommendation(sp, limit=10, seed_artists=None, seed_genres=None, seed_tracks=None, country=None):
+    recommended_tracks = sp.recommendations(limit=limit, seed_artists=seed_artists, seed_genres=seed_genres, seed_tracks=seed_tracks, country=country)
+    cleaned_recommended_tracks = []
+    
+    for idx, track in enumerate(recommended_tracks['tracks'], start=1):
+        track_info = {
+            'track_rank': idx,
+            'track_name': track['name'],
+            'track_artist': track['artists'][0]['name'],
+            'track_uri': track['uri'],
+            'track_href': track['external_urls']['spotify']
+        }
+        cleaned_recommended_tracks.extend(track_info)
+        
+    return recommended_tracks
