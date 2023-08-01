@@ -162,3 +162,26 @@ def get_audio_feature_graph():
     
 """
 """
+import requests
+from bs4 import BeautifulSoup
+
+def extract_genres(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        genres = []
+
+        # Find all table rows ('tr') in the webpage
+        rows = soup.find_all('tr')
+
+        for row in rows:
+            # Find the genre in the third column ('td') of the row
+            genre = row.find_all('td')[2].text.strip()
+            if genre:
+                genres.append(genre)
+
+        return genres
+
+    else:
+        print("Failed to fetch the webpage.")
+        return []
