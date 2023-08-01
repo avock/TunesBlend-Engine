@@ -204,18 +204,18 @@ def get_spotify_search(sp, limit=10, type='track', **kwargs):
         if filter in kwargs:
             search_filters_param[filter] = str(filter).replace('_', ':')
 
-    query_string = "remaster "
+    query_string = ""
     
     for key, value in search_filters_param.items():
         if (key == 'tag_hipster' or key == 'tag_new'):
             query_string += (f"{value} ")
         else:
-            query_string += (f"{key}:{value} ")
+            query_string += (f'{key}:"{value}" ')
         
     # url encoding requires spaces to be replaced with '%20' (but : doesn't need to be replaced for some reason)
     query_string = str(query_string).strip().replace(' ', '%20')
     print(f"Query String: {query_string}")
-    search_result = sp.search(q=query_string, limit=limit, type=type)
+    search_result = sp.search(q='genre%3A%22british%20blue%22', limit=limit, type=type)
     
     search_result_list = []
     
