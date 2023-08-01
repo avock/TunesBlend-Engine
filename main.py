@@ -34,7 +34,7 @@ Module initializer
 """
 
 def main():
-    print(get_spotify_search(sp, album='test', track='taa'))
+    print(get_spotify_search(sp, artist='Taylor Swift'))
 
 if __name__ == "__main__":
     main()
