@@ -122,6 +122,8 @@ def get_user_total_tracks(sp):
         total_track_count += playlist['playlist_track_count']
     return total_track_count
 
+
+
 """
 
 """
@@ -146,3 +148,11 @@ def get_playlist_top_tracks(sp, playlist_uri, track_count = 10, time_range = 'lo
     
     print(len(playlist_top_tracks))
     return playlist_top_tracks
+
+
+
+"""
+"""
+def get_user_playlist_popularity(sp):
+    playlists = get_user_playlists(sp)
+    top_tracks = get_user_top_tracks(sp, limit=100)
