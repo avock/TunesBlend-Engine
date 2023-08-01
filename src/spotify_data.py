@@ -137,6 +137,7 @@ def get_playlist_tracks(sp, playlist_uri='spotify:playlist:6FS0wzsoprqRG9PAFsmVS
     return track_list
 
 """
+Note: Due to spotify's limitation, it is impossible to fetch > 100 top tracks for every user, the hard cap is 100
 Returns an array of track dictionaries in the following format:
     ```
     {
