@@ -34,8 +34,8 @@ Module initializer
 """
 
 def main():
-    # print(get_artist_genre(track_uris='spotify:track:0UaMYEvWZi0ZqiDOoHU3YI', sp=sp))
-    pass
+    # print(get_user_playlist_count(sp))
+    pprint(get_user_playlist_popularity(sp), sort_dicts=False)
 
 if __name__ == "__main__":
     main()

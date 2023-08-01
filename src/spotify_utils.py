@@ -155,4 +155,43 @@ def get_playlist_top_tracks(sp, playlist_uri, track_count = 10, time_range = 'lo
 """
 def get_user_playlist_popularity(sp):
     playlists = get_user_playlists(sp)
+    playlist_count = get_user_playlist_count(sp)
+    
+    playlist_details = [{
+        'uri' : playlist['playlist_uri'],
+        'title': playlist['playlist_name'],
+        'href': playlist['playlist_href']    
+    } for playlist in playlists]
+    
     top_tracks = get_user_top_tracks(sp, limit=100)
+    playlist_popularity = []
+    
+    for idx, playlist in enumerate(playlist_details, start=1):
+        
+        status_message = f'Analysing Playlist {idx}/{playlist_count}'
+        print(status_message)
+        if(idx == playlist_count): print(' ')
+        
+        tracks = get_playlist_tracks(sp, playlist['uri'])
+
+        popularity_score = sum(1 for track in tracks['tracks'] if track['track_uri'] in [t['track_uri'] for t in top_tracks])
+
+        playlist_popularity.append({
+            'title': playlist['title'],
+            # 'href': playlist['href'],
+            'popularity': popularity_score
+        })
+        
+    other_playlist_popularity = {
+        'title': 'Other',
+        'popularity': 100 - sum(p['popularity'] for p in playlist_popularity)
+    }
+    
+    playlist_popularity.append(other_playlist_popularity)
+
+    playlist_popularity.sort(key=lambda x: x['popularity'], reverse=True)
+
+    for playlist in playlist_popularity:
+        playlist['popularity'] = str(playlist['popularity']) + '%'
+
+    return playlist_popularity
