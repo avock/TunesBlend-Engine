@@ -190,7 +190,7 @@ def get_user_top_tracks(sp, limit=10, time_range='long_term'):
     
     return top_tracks
 
-def get_spotify_search(sp, limit=10, **kwargs):
+def get_spotify_search(sp, limit=10, type='track', **kwargs):
     search_filters = ['album', 'artist', 'track', 'year', 'upc', 'isrc', 'genre']
     search_boolean_filters = ['tag:hipster', 'tag:new']
 
@@ -198,17 +198,21 @@ def get_spotify_search(sp, limit=10, **kwargs):
 
     for filter in search_filters:
         if filter in kwargs:
-            search_filters_param[filter] = kwargs[filter]
+            search_filters_param[filter] = kwargs[filter].strip()
 
     for filter in search_boolean_filters:
         if filter in kwargs:
             search_filters_param[filter] = filter
 
-    query_string = "remaster%20"
+    query_string = "remaster "
+    
     for key, value in search_filters_param.items():
-        query_string += (f"{key}:{value}%20")
+        query_string += (f"{key}:{value} ")
         
-    search_result = sp.search(q=query_string, limit=limit)
+    # url encoding requires spaces to be replaced with '%20' (but : doesn't need to be replaced for some reason)
+    query_string = str(query_string).strip().replace(' ', '%20')
+
+    search_result = sp.search(q=query_string, limit=limit, type=type)
     return search_result
 
 """
