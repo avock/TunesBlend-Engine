@@ -34,8 +34,7 @@ Module initializer
 """
 
 def main():
-    # print(get_user_playlist_count(sp))
-    pprint(get_user_playlist_popularity(sp), sort_dicts=False   )
+    print(get_spotify_search(sp, album='test', track='taa'))
 
 if __name__ == "__main__":
     main()
