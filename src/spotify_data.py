@@ -1,4 +1,4 @@
-import datetime, pprint
+import datetime, pprint, urllib.parse
 
 from src.data_processing import *
 from src.telegram_bot import *
@@ -190,7 +190,26 @@ def get_user_top_tracks(sp, limit=10, time_range='long_term'):
     
     return top_tracks
 
+def get_spotify_search(sp, limit=10, **kwargs):
+    search_filters = ['album', 'artist', 'track', 'year', 'upc', 'isrc', 'genre']
+    search_boolean_filters = ['tag:hipster', 'tag:new']
 
+    search_filters_param = {}
+
+    for filter in search_filters:
+        if filter in kwargs:
+            search_filters_param[filter] = kwargs[filter]
+
+    for filter in search_boolean_filters:
+        if filter in kwargs:
+            search_filters_param[filter] = filter
+
+    query_string = "remaster%20"
+    for key, value in search_filters_param.items():
+        query_string += (f"{key}:{value}%20")
+        
+    search_result = sp.search(q=query_string, limit=limit)
+    return search_result
 
 """
 Retrieves Spotify recommendations based on various seed parameters and audio features
