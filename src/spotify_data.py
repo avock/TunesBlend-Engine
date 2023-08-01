@@ -9,7 +9,7 @@ Spotify Constants
 """
 genre_list = ['acoustic', 'afrobeat', 'alt-rock', 'alternative', 'ambient', 'anime', 'black-metal', 'bluegrass', 'blues', 'bossanova', 'brazil', 'breakbeat', 'british', 'cantopop', 'chicago-house', 'children', 'chill', 'classical', 'club', 'comedy', 'country', 'dance', 'dancehall', 'death-metal', 'deep-house', 'detroit-techno', 'disco', 'disney', 'drum-and-bass', 'dub', 'dubstep', 'edm', 'electro', 'electronic', 'emo', 'folk', 'forro', 'french', 'funk', 'garage', 'german', 'gospel', 'goth', 'grindcore', 'groove', 'grunge', 'guitar', 'happy', 'hard-rock', 'hardcore', 'hardstyle', 'heavy-metal', 'hip-hop', 'holidays', 'honky-tonk', 'house', 'idm', 'indian', 'indie', 'indie-pop', 'industrial', 'iranian', 'j-dance', 'j-idol', 'j-pop', 'j-rock', 'jazz', 'k-pop', 'kids', 'latin', 'latino', 'malay', 'mandopop', 'metal', 'metal-misc', 'metalcore', 'minimal-techno', 'movies', 'mpb', 'new-age', 'new-release', 'opera', 'pagode', 'party', 'philippines-opm', 'piano', 'pop', 'pop-film', 'post-dubstep', 'power-pop', 'progressive-house', 'psych-rock', 'punk', 'punk-rock', 'r-n-b', 'rainy-day', 'reggae', 'reggaeton', 'road-trip', 'rock', 'rock-n-roll', 'rockabilly', 'romance', 'sad', 'salsa', 'samba', 'sertanejo', 'show-tunes', 'singer-songwriter', 'ska', 'sleep', 'songwriter', 'soul', 'soundtracks', 'spanish', 'study', 'summer', 'swedish', 'synth-pop', 'tango', 'techno', 'trance', 'trip-hop', 'turkish', 'work-out', 'world-music']
 
-def get_audio_features(track_uris, sp):
+def get_audio_features(sp, track_uris):
     audio_features = sp.audio_features(track_uris)
     filtered_audio_features = [filter_audio_feature(audio_feature) for audio_feature in audio_features]
     return filtered_audio_features
@@ -17,7 +17,7 @@ def get_audio_features(track_uris, sp):
 """
 Function to retreive the genre(s) of the album for one or multiple tracks.
 """
-def get_album_genre(track_uris, sp):
+def get_album_genre(sp, track_uris):
     if not isinstance(track_uris, list):
         
         track_details = sp.track(track_uris)
@@ -36,7 +36,7 @@ def get_album_genre(track_uris, sp):
 """
 Function to retrieve the genre(s) of the artist for one or multiple tracks.
 """
-def get_artist_genre(track_uris, sp):
+def get_artist_genre(sp, track_uris):
     if not isinstance(track_uris, list):
         
         track_details = sp.track(track_uris)
@@ -192,7 +192,7 @@ def get_user_top_tracks(sp, limit=10, time_range='long_term'):
 
 def get_spotify_search(sp, limit=10, type='track', **kwargs):
     search_filters = ['album', 'artist', 'track', 'year', 'upc', 'isrc', 'genre']
-    search_boolean_filters = ['tag:hipster', 'tag:new']
+    search_boolean_filters = ['tag_hipster', 'tag_new']
 
     search_filters_param = {}
 
@@ -202,16 +202,19 @@ def get_spotify_search(sp, limit=10, type='track', **kwargs):
 
     for filter in search_boolean_filters:
         if filter in kwargs:
-            search_filters_param[filter] = filter
+            search_filters_param[filter] = str(filter).replace('_', ':')
 
     query_string = "remaster "
     
     for key, value in search_filters_param.items():
-        query_string += (f"{key}:{value} ")
+        if (key == 'tag_hipster' or key == 'tag_new'):
+            query_string += (f"{value} ")
+        else:
+            query_string += (f"{key}:{value} ")
         
     # url encoding requires spaces to be replaced with '%20' (but : doesn't need to be replaced for some reason)
     query_string = str(query_string).strip().replace(' ', '%20')
-
+    print(f"Query String: {query_string}")
     search_result = sp.search(q=query_string, limit=limit, type=type)
     
     search_result_list = []
