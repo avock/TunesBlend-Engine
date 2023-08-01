@@ -27,14 +27,15 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
 audio_features = []
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-pprint = pprint.pprint
+def pprint(text):
+    pr.pprint(text, sort_dicts=False)
 
 """
 Module initializer
 """
 
 def main():
-    print(get_spotify_search(sp, artist='Taylor Swift'))
+    pprint(get_spotify_search(sp, artist='Taylor Swift'))
 
 if __name__ == "__main__":
     main()
