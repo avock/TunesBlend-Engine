@@ -161,12 +161,13 @@ def get_audio_feature_graph():
     
     
 """
+Extracts all genres from everynoise.com
 """
 import requests
 from bs4 import BeautifulSoup
 
-def extract_genres(url):
-    response = requests.get(url)
+def extract_genres():
+    response = requests.get('https://everynoise.com/everynoise1d.cgi?scope=all&vector=popularity')
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         genres = []
