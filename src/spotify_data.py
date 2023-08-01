@@ -201,7 +201,7 @@ Retrieves Spotify recommendations based on various seed parameters and audio fea
         'artist': 'Charlie Worsham',
         'artist_uri': 'spotify:artist:64KEffDW9EtZ1y2vBYgq8T',
         'album': 'Alone',
-        'album_uri': 'spotify:album:7ePC9qS9mSOTY9E0YPP6yg'
+        'album_uri': 'spotify:album:7ePC9qS9mSOTY9E0YPP6yg' 
     }
     ```
 """
