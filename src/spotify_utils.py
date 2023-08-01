@@ -61,7 +61,7 @@ Combines get_album_genres() and get_artist_genre() to generate unified genre
 
 @return list of genre(s) of each track(s) in a list
 """
-def get_track_genre(playlist, sp):
+def get_playlist_track_genre(playlist, sp):
     genre_list = []
     track_uris = get_track_uris(playlist)
     playlist_id = playlist['pid']
