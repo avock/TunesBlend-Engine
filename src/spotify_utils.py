@@ -160,7 +160,8 @@ def get_user_playlist_popularity(sp):
     playlist_details = [{
         'uri' : playlist['playlist_uri'],
         'title': playlist['playlist_name'],
-        'href': playlist['playlist_href']    
+        'href': playlist['playlist_href'],    
+        'track_count': playlist['playlist_track_count']    
     } for playlist in playlists]
     
     top_tracks = get_user_top_tracks(sp, limit=100)
@@ -175,16 +176,22 @@ def get_user_playlist_popularity(sp):
         tracks = get_playlist_tracks(sp, playlist['uri'])
 
         popularity_score = sum(1 for track in tracks['tracks'] if track['track_uri'] in [t['track_uri'] for t in top_tracks])
+        popularity_percentage = popularity_score / playlist['track_count'] * 100
 
         playlist_popularity.append({
             'title': playlist['title'],
-            # 'href': playlist['href'],
-            'popularity': popularity_score
+            'popularity': popularity_score,
+            'popularity_percentage': popularity_percentage,
+            'href': playlist['href'],
+            'uri': playlist['uri'],
         })
         
     other_playlist_popularity = {
         'title': 'Other',
-        'popularity': 100 - sum(p['popularity'] for p in playlist_popularity)
+        'popularity': 100 - sum(p['popularity'] for p in playlist_popularity),
+        'popularity_percentage': 'N/A',
+        'href': 'N/A',
+        'uri': 'N/A',
     }
     
     playlist_popularity.append(other_playlist_popularity)
