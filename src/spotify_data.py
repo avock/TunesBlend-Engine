@@ -215,7 +215,7 @@ Retrieves Spotify recommendations based on various seed parameters and audio fea
 def get_spotify_recommendation(sp, limit=10, seed_artists=None, seed_genres=None, seed_tracks=None, country=None, **kwargs):
     cleaned_recommended_tracks = []
     
-    audio_features = ['danceability', 'energy', 'loudness', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo']
+    audio_features = ['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'loudness', 'speechiness', 'tempo', 'valence']
     audio_features_param = {}
 
     for feature in audio_features:

@@ -34,8 +34,8 @@ Module initializer
 """
 
 def main():
-    print(get_spotify_recommendation(sp, limit=1, seed_genres=['sertanejo']))
     # print(get_artist_genre(track_uris='spotify:track:0UaMYEvWZi0ZqiDOoHU3YI', sp=sp))
+    pass
 
 if __name__ == "__main__":
     main()
