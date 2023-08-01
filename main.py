@@ -37,9 +37,11 @@ Module initializer
 
 def main():
     # print(get_artist_genre(sp, '6VxiALWKleywQTXHMc9g10'))
-    pprint(get_spotify_search(sp, genre='trap brasileiro', album='Festival 2023'))
-
-
-
+    tracks = (get_playlist_tracks(sp, 'spotify:playlist:4YB4UFkYYJhy3iNaHZoGXa'))
+    track_genres = []
+    for track in tracks['tracks']:
+        track_genres.append(get_artist_genre(sp, track['track_uri']))
+    print(get_all_genres(track_genres))
+    
 if __name__ == "__main__":
     main()

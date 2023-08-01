@@ -1,5 +1,6 @@
 import json, os, pandas as pd
 from itertools import zip_longest
+from collections import Counter
 
 """
 Function to read data from a JSON file
@@ -91,12 +92,15 @@ def arr_combine(arr1, arr2):
 Returns all unique genres present
 
 @param: an array of array of genres 
-@return: an array of every unique genre 
+@return: an array of (genre_name, genre_count) for every unique genre 
 """
 def get_all_genres(array):
-    all_genres = list(set(genre for genres in array for genre in genres))
-    return sorted(all_genres)
+    # all_genres = list(set(genre for genres in array for genre in genres))
+    # return sorted(all_genres)
+    genre_counts = Counter(genre for genres in array for genre in genres)
+    all_genres = sorted(genre_counts.items(), key=lambda x: x[1], reverse=True)
 
+    return all_genres
 
 
 """
