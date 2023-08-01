@@ -35,7 +35,15 @@ Module initializer
 """
 
 def main():
-    pprint(get_spotify_search(sp, artist='Taylor Swift'))
+    results = get_spotify_search(sp, genre='afterglow')
+    
+    track_artist_genres = []
+    for track in results['tracks']:
+        track_uri = track['track_uri']
+        print(f"{track['track_name']}:{track['track_href']}")
+        track_artist_genres.append(get_artist_genre(sp, track_uri))
+    print(track_artist_genres)
+
 
 if __name__ == "__main__":
     main()
