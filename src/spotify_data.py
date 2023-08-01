@@ -213,8 +213,29 @@ def get_spotify_search(sp, limit=10, type='track', **kwargs):
     query_string = str(query_string).strip().replace(' ', '%20')
 
     search_result = sp.search(q=query_string, limit=limit, type=type)
+    
+    search_result_list = []
+    
+    for idx, track in enumerate(search_result['tracks']['items'], start=1):
+        track_info = {
+            'track_idx': idx,
+            'track_name': track['name'],
+            'track_uri': track['uri'],
+            'track_href': track['external_urls']['spotify'],
+            'artist': track['artists'][0]['name'],
+            'artist_uri': track['artists'][0]['uri'],
+            'album': track['album']['name'],
+            'album_uri': track['album']['uri'],
+        }
+        search_result_list.append(track_info)
+    
+    search_result = {
+        'track_count': search_result['tracks']['total'],
+        'tracks': search_result_list,
+    }
+    
     return search_result
-
+    
 """
 Retrieves Spotify recommendations based on various seed parameters and audio features
 
