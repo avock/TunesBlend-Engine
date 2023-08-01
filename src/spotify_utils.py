@@ -152,6 +152,7 @@ def get_playlist_top_tracks(sp, playlist_uri, track_count = 10, time_range = 'lo
 
 
 """
+Takes the user's playlists and their track counts, along with the top tracks of the user, and calculates the popularity of each playlist based on the number of top tracks present in them.
 """
 def get_user_playlist_popularity(sp):
     playlists = get_user_playlists(sp)
@@ -176,7 +177,7 @@ def get_user_playlist_popularity(sp):
         tracks = get_playlist_tracks(sp, playlist['uri'])
 
         popularity_score = sum(1 for track in tracks['tracks'] if track['track_uri'] in [t['track_uri'] for t in top_tracks])
-        popularity_percentage = popularity_score / playlist['track_count'] * 100
+        popularity_percentage = round((popularity_score / playlist['track_count'] * 100), 2)
 
         playlist_popularity.append({
             'title': playlist['title'],
@@ -200,5 +201,6 @@ def get_user_playlist_popularity(sp):
 
     for playlist in playlist_popularity:
         playlist['popularity'] = str(playlist['popularity']) + '%'
+        playlist['popularity_percentage'] = str(playlist['popularity_percentage']) + '%'
 
     return playlist_popularity
