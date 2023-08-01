@@ -32,7 +32,7 @@ Module initializer
 """
 
 def main():
-    pr.pprint(get_spotify_recommendation(sp, seed_tracks=['1uwvhkMMQlnaHQ8wtldM7K'], limit=1))
+    pr.pprint(get_spotify_recommendation(sp, seed_tracks=['1uwvhkMMQlnaHQ8wtldM7K'], limit=1), sort_dicts=False)
 
 if __name__ == "__main__":
     main()

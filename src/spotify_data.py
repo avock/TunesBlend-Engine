@@ -52,7 +52,7 @@ def get_artist_genre(track_uris, sp):
         return artist_genre_list
 
 """
-Returns an array of playlists in the following format:
+Returns an array of playlist dictionaries in the following format:
     ```
      {  
         'playlist_name': '//日本語  🇯🇵',
@@ -137,7 +137,7 @@ def get_playlist_tracks(sp, playlist_uri='spotify:playlist:6FS0wzsoprqRG9PAFsmVS
     return track_list
 
 """
-Returns an array of tracks in the following format:
+Returns an array of track dictionaries in the following format:
     ```
     {
         'track_rank': 1,
@@ -184,7 +184,26 @@ def get_user_top_tracks(sp, limit=50, offset=0, time_range='long_term'):
 
 
 """
+Retrieves Spotify recommendations based on various seed parameters and audio features
 
+@param: (note: all are OPTIONAL) 
+    - limit : number of tracks to return
+    - seed_artists/genres/tracks
+    - {various min/max/target)audio_features}
+    
+@return: An array of track dictionaries in the following format:
+    ```
+    {
+        'track_rank': 1,
+        'track_name': 'Could It Be',
+        'track_uri': 'spotify:track:6fRKgExSY24i2whGdAJUnM',
+        'track_href': 'https://open.spotify.com/track/6fRKgExSY24i2whGdAJUnM',
+        'artist': 'Charlie Worsham',
+        'artist_uri': 'spotify:artist:64KEffDW9EtZ1y2vBYgq8T',
+        'album': 'Alone',
+        'album_uri': 'spotify:album:7ePC9qS9mSOTY9E0YPP6yg'
+    }
+    ```
 """
 def get_spotify_recommendation(sp, limit=10, seed_artists=None, seed_genres=None, seed_tracks=None, country=None, **kwargs):
     cleaned_recommended_tracks = []
