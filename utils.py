@@ -43,7 +43,7 @@ def get_all_audio_features():
         relative_raw_data_path = f'data/raw_data/mpd.slice.{i*1000}-{(i+1)*1000 - 1}.json'
         raw_data_path = os.path.join(current_dir, relative_raw_data_path)
         
-        relative_processed_data_path = f'data/processed_data/clean-data_{i*1000}-{(i+1)*1000 - 1}.csv'
+        relative_processed_data_path = f'data/processed_data/audio_features/audio_features_{i*1000}-{(i+1)*1000 - 1}.csv'
         processed_data_path = os.path.join(current_dir, relative_processed_data_path)
         
         json_data = read_data(raw_data_path)
@@ -66,9 +66,8 @@ track3_id = 'spotify:track:0UaMYEvWZi0ZqiDOoHU3YI'
 
 
 # Individual Tracks
-def get_track_genre_individual():
+def get_playlist_track_genre_individual():
     track_details = sp.track(track3_id)
-    print(track_details)
 
     artist_id = track_details['artists'][0]['id']
     album_id = track_details['album']['id']
@@ -80,7 +79,7 @@ def get_track_genre_individual():
     print(f"Album Genre: {album_genre}")
 
 # Multiple Tracks
-def get_track_genre_multiple():
+def get_playlist_track_genre_multiple():
     tracks = [track_id, track2_id, track3_id]
 
     artist_id_list = [track['artists'][0]['id'] for track in track_details_list['tracks']]
@@ -99,28 +98,18 @@ Function to get genre of each playlist and the overall genre
 def get_overall_genre():
     audio_features = []
     genre_list = []
-    for i in range(1):
-
-        relative_raw_data_path = f'data/raw_data/mpd.slice.{i*1000}-{(i+1)*1000 - 1}.json'
-        raw_data_path = os.path.join(current_dir, relative_raw_data_path)
-        
-        relative_processed_data_path = f'data/processed_data/genre-data_{i*1000}-{(i+1)*1000 - 1}.csv'
-        processed_data_path = os.path.join(current_dir, relative_processed_data_path)
-        
-    audio_features = []
-    genre_list = []
-
+    
     for i in range(10):
         relative_raw_data_path = f'data/raw_data/mpd.slice.{i*1000}-{(i+1)*1000 - 1}.json'
         raw_data_path = os.path.join(current_dir, relative_raw_data_path)
         
-        relative_processed_data_path = f'data/processed_data/genre-data_{i*1000}-{(i+1)*1000 - 1}.csv'
+        relative_processed_data_path = f'data/processed_data/genre/genre_{i*1000}-{(i+1)*1000 - 1}.csv'
         processed_data_path = os.path.join(current_dir, relative_processed_data_path)
         
         try:
             json_data = read_data(raw_data_path)
             for playlist in json_data['playlists']:
-                audio_features_list = get_track_genre(playlist, sp)
+                audio_features_list = get_playlist_track_genre(playlist, sp)
                 audio_features.extend(audio_features_list)
 
             genre_list.extend(audio_features)
@@ -135,6 +124,7 @@ def get_overall_genre():
             print(f"Error processing file {i}: {str(e)}")
 
     print(f"Overall Genre List: {genre_list}")
+    write_data(genre_list, processed_data_path)
 
 
 """

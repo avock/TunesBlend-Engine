@@ -27,12 +27,15 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
 audio_features = []
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
+pprint = pprint.pprint
+
 """
 Module initializer
 """
 
 def main():
-    pr.pprint(get_user_top_tracks(sp, limit=101), sort_dicts=False)
+    print(get_spotify_recommendation(sp, limit=1, seed_genres=['sertanejo']))
+    # print(get_artist_genre(track_uris='spotify:track:0UaMYEvWZi0ZqiDOoHU3YI', sp=sp))
 
 if __name__ == "__main__":
     main()
