@@ -43,7 +43,7 @@ def get_all_audio_features():
         relative_raw_data_path = f'data/raw_data/mpd.slice.{i*1000}-{(i+1)*1000 - 1}.json'
         raw_data_path = os.path.join(current_dir, relative_raw_data_path)
         
-        relative_processed_data_path = f'data/processed_data/audio_features/audio_features_{i*1000}-{(i+1)*1000 - 1}.csv'
+        relative_processed_data_path = f'data/processed_data/audio_features/audio_features-{i*1000}-{(i+1)*1000 - 1}.csv'
         processed_data_path = os.path.join(current_dir, relative_processed_data_path)
         
         json_data = read_data(raw_data_path)
