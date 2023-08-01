@@ -160,13 +160,13 @@ def get_user_top_tracks(sp, limit=10, time_range='long_term'):
         raise ValueError('Value of range must be short_term (4 weeks), medium_term (6 months) or long_term (all time)')
     
     if limit > 100:
-        raise ValueError('Value of limit must be less than 50')
+        raise ValueError('Value of limit must be less than 100')
     
     top_tracks = []
     track_list = []
     
     try:
-        while curr_offset < limit:
+        while curr_offset < limit - 1:
             curr_limit = 50 if limit-curr_offset > 50 else limit-curr_offset
             track_list.extend(sp.current_user_top_tracks(limit=curr_limit, offset=curr_offset, time_range=time_range)['items'])
             curr_offset += 49
