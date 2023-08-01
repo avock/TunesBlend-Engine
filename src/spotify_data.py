@@ -186,9 +186,22 @@ def get_user_top_tracks(sp, limit=50, offset=0, time_range='long_term'):
 """
 
 """
-def get_spotify_recommendation(sp, limit=10, seed_artists=None, seed_genres=None, seed_tracks=None, country=None):
-    recommended_tracks = sp.recommendations(limit=limit, seed_artists=seed_artists, seed_genres=seed_genres, seed_tracks=seed_tracks, country=country)
+def get_spotify_recommendation(sp, limit=10, seed_artists=None, seed_genres=None, seed_tracks=None, country=None, **kwargs):
     cleaned_recommended_tracks = []
+    
+    audio_features = ['danceability', 'energy', 'loudness', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo']
+    audio_features_param = {}
+
+    for feature in audio_features:
+        feature_min = f'min_{feature}'
+        feature_max = f'max_{feature}'
+        feature_target = f'target_{feature}'
+        
+        for feature_param in [feature_min, feature_max, feature_target]:
+            if feature_param in kwargs:
+                audio_features_param[feature_param] = kwargs[feature_param]
+            
+    recommended_tracks = sp.recommendations(limit=limit, seed_artists=seed_artists, seed_genres=seed_genres, seed_tracks=seed_tracks, country=country, **audio_features_param)
     
     for idx, track in enumerate(recommended_tracks['tracks'], start=1):
         track_info = {
