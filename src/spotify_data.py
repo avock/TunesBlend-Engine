@@ -151,18 +151,24 @@ Returns an array of track dictionaries in the following format:
     }
     ```
 """
-def get_user_top_tracks(sp, limit=50, offset=0, time_range='long_term'):
+def get_user_top_tracks(sp, limit=10, time_range='long_term'):
     valid_time_ranges = ['short_term', 'medium_term', 'long_term']
+    curr_offset = 0
+    
     if time_range not in valid_time_ranges:
         raise ValueError('Value of range must be short_term (4 weeks), medium_term (6 months) or long_term (all time)')
     
-    if limit > 50:
+    if limit > 100:
         raise ValueError('Value of limit must be less than 50')
     
     top_tracks = []
+    track_list = []
+    
     try:
-        track_list = sp.current_user_top_tracks(limit=limit, offset=offset, time_range=time_range)['items']
-        
+        while curr_offset < limit:
+            curr_limit = 50 if limit-curr_offset > 50 else limit-curr_offset
+            track_list.extend(sp.current_user_top_tracks(limit=curr_limit, offset=curr_offset, time_range=time_range)['items'])
+            curr_offset += 49
         for idx, track in enumerate(track_list, start=1):
             track_info = {
                 'track_rank': idx,
