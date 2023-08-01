@@ -76,7 +76,9 @@ def get_user_playlists(sp):
     
     return playlist_list
 
-
+def get_user_playlist_count(sp):
+    playlists = get_user_playlists(sp)
+    return len(playlists)
 
 """
 Returns the following:
