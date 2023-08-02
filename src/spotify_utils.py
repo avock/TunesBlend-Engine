@@ -65,7 +65,7 @@ def get_playlist_details(playlist, sp):
     Setup GVP VM to handle large amounts of data cleanup.
     Prints status every 100 playlist processed.
     """
-    if playlist_id % 100 == 0:
+    if playlist_id % 10 == 0:
         current_time = datetime.datetime.now()
         status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
         print(status_update_message)
@@ -73,7 +73,7 @@ def get_playlist_details(playlist, sp):
     """
     Setup Telegram Bot to send status update every 500 playlist processed.
     """        
-    if playlist_id % 500 == 0 and playlist_id != 0:
+    if playlist_id % 250 == 0 and playlist_id != 0:
         current_time = datetime.datetime.now()
         status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
         send_message(status_update_message)
@@ -84,8 +84,9 @@ def get_playlist_details(playlist, sp):
     for i in range(0, len(track_uris), chunk_size):
         chunk = track_uris[i:i + chunk_size]
         track_details_chunk = get_track_details(sp, chunk)
-
+        
         pid = playlist['pid']
+        
         for track_details in track_details_chunk:
             id = f"{pid}_{track_id}"
             track_details['id'] = id

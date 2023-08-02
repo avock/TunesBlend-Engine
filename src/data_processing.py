@@ -47,7 +47,6 @@ def filter_audio_feature(audio_features):
 
 """
 def filter_track_details(track_details):
-
     if not isinstance (track_details, list):
 
         track_info = {
@@ -64,6 +63,9 @@ def filter_track_details(track_details):
 
         track_details_list = []
         for track in track_details:
+            if(track is None):
+                print('None object obtained')
+                continue
 
             track_info = {
                 'id': '',
