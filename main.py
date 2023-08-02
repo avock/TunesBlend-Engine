@@ -36,7 +36,7 @@ Module initializer
 """
 
 def main():
-    pass
+    get_playlist_details_from_file()
     
 if __name__ == "__main__":
     main()
