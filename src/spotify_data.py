@@ -4,15 +4,32 @@ from src.data_processing import *
 from src.telegram_bot import *
 
 
-"""
-Spotify Constants
-"""
-genre_list = ['acoustic', 'afrobeat', 'alt-rock', 'alternative', 'ambient', 'anime', 'black-metal', 'bluegrass', 'blues', 'bossanova', 'brazil', 'breakbeat', 'british', 'cantopop', 'chicago-house', 'children', 'chill', 'classical', 'club', 'comedy', 'country', 'dance', 'dancehall', 'death-metal', 'deep-house', 'detroit-techno', 'disco', 'disney', 'drum-and-bass', 'dub', 'dubstep', 'edm', 'electro', 'electronic', 'emo', 'folk', 'forro', 'french', 'funk', 'garage', 'german', 'gospel', 'goth', 'grindcore', 'groove', 'grunge', 'guitar', 'happy', 'hard-rock', 'hardcore', 'hardstyle', 'heavy-metal', 'hip-hop', 'holidays', 'honky-tonk', 'house', 'idm', 'indian', 'indie', 'indie-pop', 'industrial', 'iranian', 'j-dance', 'j-idol', 'j-pop', 'j-rock', 'jazz', 'k-pop', 'kids', 'latin', 'latino', 'malay', 'mandopop', 'metal', 'metal-misc', 'metalcore', 'minimal-techno', 'movies', 'mpb', 'new-age', 'new-release', 'opera', 'pagode', 'party', 'philippines-opm', 'piano', 'pop', 'pop-film', 'post-dubstep', 'power-pop', 'progressive-house', 'psych-rock', 'punk', 'punk-rock', 'r-n-b', 'rainy-day', 'reggae', 'reggaeton', 'road-trip', 'rock', 'rock-n-roll', 'rockabilly', 'romance', 'sad', 'salsa', 'samba', 'sertanejo', 'show-tunes', 'singer-songwriter', 'ska', 'sleep', 'songwriter', 'soul', 'soundtracks', 'spanish', 'study', 'summer', 'swedish', 'synth-pop', 'tango', 'techno', 'trance', 'trip-hop', 'turkish', 'work-out', 'world-music']
 
 def get_audio_features(sp, track_uris):
     audio_features = sp.audio_features(track_uris)
     filtered_audio_features = [filter_audio_feature(audio_feature) for audio_feature in audio_features]
     return filtered_audio_features
+
+
+
+"""
+Function to retreive the details of one or multiple tracks.
+"""
+def get_track_details(sp, track_uris):
+    if not isinstance(track_uris, list):
+
+        track_details = sp.track(track_uris)
+        filtered_track_details = filter_track_details(track_details)
+        
+        return filtered_track_details
+    else:
+
+        track_details_list = sp.tracks(track_uris)['tracks']
+        filtered_track_details_list = filter_track_details(track_details_list)
+
+        return filtered_track_details_list
+
+
 
 """
 Function to retreive the genre(s) of the album for one or multiple tracks.

@@ -17,10 +17,12 @@ DO NOT REMOVE SpotiPy instance to fetch authenticate connection to Spotify API
 client_id = os.getenv('CLIENT_ID')
 client_secret = os.getenv('CLIENT_SECRET')
 
+spotify_scopes = "playlist-read-private playlist-modify-private playlist-modify-public user-read-recently-played user-top-read user-library-modify"
+
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                client_secret=client_secret,
                                                redirect_uri="http://localhost:8000/callback",
-                                               scope="user-library-read"))
+                                               scope=spotify_scopes))
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -28,7 +30,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 Function to test spotify API
 """
 def spotify_api_test():
-    audio_feature = get_audio_features('spotify:track:0UaMYEvWZi0ZqiDOoHU3YI', sp)
+    audio_feature = get_audio_features(sp, 'spotify:track:0UaMYEvWZi0ZqiDOoHU3YI')
     print(audio_feature)
 
 
@@ -36,9 +38,38 @@ def spotify_api_test():
 """
 Function to fetch Audio Features from playlist json
 """
-def get_all_audio_features():
+def get_playlist_details_from_file():
+
+    playlist_details = []
+    
     # loops through all 10 raw_data_files
-    for i in range(9, 10):
+    for i in range(0, 10):
+
+        relative_raw_data_path = f'data/raw_data/mpd.slice.{i*1000}-{(i+1)*1000 - 1}.json'
+        raw_data_path = os.path.join(current_dir, relative_raw_data_path)
+        
+        relative_processed_data_path = f'data/processed_data/playlist_details/details-{i*1000}-{(i+1)*1000 - 1}.csv'
+        processed_data_path = os.path.join(current_dir, relative_processed_data_path)
+        
+        json_data = read_data(raw_data_path)
+        for playlist in json_data['playlists']:
+            playlist_details_list = get_playlist_details(playlist, sp)
+
+            playlist_details.extend(playlist_details_list)
+
+        write_data(playlist_details, processed_data_path)
+
+        # Reset playlist_details_list for the next raw_data_file
+        playlist_details = []
+
+
+
+"""
+Function to fetch Audio Features from playlist json
+"""
+def get_audio_features_from_file():
+    # loops through all 10 raw_data_files
+    for i in range(1, 10):
 
         relative_raw_data_path = f'data/raw_data/mpd.slice.{i*1000}-{(i+1)*1000 - 1}.json'
         raw_data_path = os.path.join(current_dir, relative_raw_data_path)

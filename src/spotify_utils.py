@@ -54,6 +54,49 @@ def get_playlist_audio_features(playlist, sp):
 
 
 """
+"""
+def get_playlist_details(playlist, sp):
+    
+    playlist_details_list = []
+    track_uris = get_track_uris(playlist)
+    playlist_id = playlist['pid']
+
+    """
+    Setup GVP VM to handle large amounts of data cleanup.
+    Prints status every 100 playlist processed.
+    """
+    if playlist_id % 100 == 0:
+        current_time = datetime.datetime.now()
+        status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
+        print(status_update_message)
+    
+    """
+    Setup Telegram Bot to send status update every 500 playlist processed.
+    """        
+    if playlist_id % 500 == 0 and playlist_id != 0:
+        current_time = datetime.datetime.now()
+        status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
+        send_message(status_update_message)
+
+    chunk_size = 50
+    track_id = 0
+    
+    for i in range(0, len(track_uris), chunk_size):
+        chunk = track_uris[i:i + chunk_size]
+        track_details_chunk = get_track_details(sp, chunk)
+
+        pid = playlist['pid']
+        for track_details in track_details_chunk:
+            id = f"{pid}_{track_id}"
+            track_details['id'] = id
+            playlist_details_list.append(track_details)
+            track_id += 1
+
+    return playlist_details_list
+
+
+
+"""
 Combines get_album_genres() and get_artist_genre() to generate unified genre
 * NOTE: as of 27/07/23, albums do NOT return any genres. So get_album_genres() removed for now, to save API calls
 

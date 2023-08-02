@@ -44,6 +44,42 @@ def filter_audio_feature(audio_features):
 
 
 """
+
+"""
+def filter_track_details(track_details):
+
+    if not isinstance (track_details, list):
+
+        track_info = {
+            'id': '',
+            'track_uri': track_details['uri'],
+            'track_title': track_details['name'],
+            'track_url': track_details['external_urls']['spotify'],
+            'track_popularity': track_details['popularity'],
+            'release_date': track_details['album']['release_date'],
+            'album_uri': track_details['album']['uri'],
+        }
+        return track_info
+    else :
+
+        track_details_list = []
+        for track in track_details:
+
+            track_info = {
+                'id': '',
+                'track_uri': track['uri'],
+                'track_title': track['name'],
+                'track_url': track['external_urls']['spotify'],
+                'track_popularity': track['popularity'],
+                'release_date': track['album']['release_date'],
+                'album_uri': track['album']['uri'],
+            }
+            track_details_list.append(track_info)
+        return track_details_list
+
+
+
+"""
 Function to extract uri of every track from playlist
 
 @param: 
