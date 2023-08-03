@@ -6,7 +6,10 @@ python-telegram-bot==13.15
 
 # data analysis libraries
 matplotlib
-jupyterthemes
 beautifulsoup4
 nltk
 wordcloud
+
+# useful jupyternotebook libraries
+jupyterthemes
+jupyter_contrib_nbextensions
