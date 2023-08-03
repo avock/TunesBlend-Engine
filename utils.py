@@ -43,7 +43,10 @@ def get_playlist_details_from_file():
     playlist_details = []
     
     # loops through all 10 raw_data_files
-    for i in range(9, 10):
+    for i in range(3, 10):
+        if i == 6 or i == 7:
+            print(f'Skipping file {i*1000}-{(i+1)*1000 - 1}')
+            continue
 
         relative_raw_data_path = f'data/raw_data/mpd.slice.{i*1000}-{(i+1)*1000 - 1}.json'
         raw_data_path = os.path.join(current_dir, relative_raw_data_path)
