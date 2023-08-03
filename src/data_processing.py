@@ -65,17 +65,25 @@ def filter_track_details(track_details):
         for track in track_details:
             if(track is None):
                 print('None object obtained')
-                continue
-
-            track_info = {
-                'id': '',
-                'track_uri': track['uri'],
-                'track_title': track['name'],
-                'track_url': track['external_urls']['spotify'],
-                'track_popularity': track['popularity'],
-                'release_date': track['album']['release_date'],
-                'album_uri': track['album']['uri'],
-            }
+                track_info = {
+                    'id': 'NA',
+                    'track_uri': 'NA',
+                    'track_title': 'NA',
+                    'track_url': 'NA',
+                    'track_popularity': 'NA',
+                    'release_date': 'NA',
+                    'album_uri': 'NA'
+                }
+            else :
+                track_info = {
+                    'id': '',
+                    'track_uri': track['uri'],
+                    'track_title': track['name'],
+                    'track_url': track['external_urls']['spotify'],
+                    'track_popularity': track['popularity'],
+                    'release_date': track['album']['release_date'],
+                    'album_uri': track['album']['uri'],
+                }
             track_details_list.append(track_info)
         return track_details_list
 
