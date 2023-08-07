@@ -6,3 +6,4 @@
 test.py
 /src/__pycache__
 .cache
+*.png

@@ -36,7 +36,7 @@ Module initializer
 """
 
 def main():
-    get_playlist_details_from_file()
+    pprint([track for track in get_user_top_tracks(sp, 100, 'medium_term') if track['artist']=='Taylor Swift'][:5])
     
 if __name__ == "__main__":
     main()
