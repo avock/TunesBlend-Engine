@@ -249,6 +249,18 @@ def get_user_playlist_popularity(sp):
 
     return playlist_popularity
 
+
+
+"""
+
+"""
 def get_user_top_tracks_for_artist(sp, artist, top_track_count=5, time_range='long_term', track_source_count=100):
+    
+    valid_time_ranges = ['short_term', 'medium_term', 'long_term']
+    if time_range not in valid_time_ranges:
+        raise ValueError('Value of range must be short_term (4 weeks), medium_term (6 months) or long_term (all time)')
+    if top_track_count > 100 or track_source_count > 100:
+        raise ValueError('Maximum value for track_count is 100')
+    
     tracks = [track for track in get_user_top_tracks(sp, track_source_count, time_range) if track['artist']==artist][:top_track_count]
     return tracks
