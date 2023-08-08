@@ -36,7 +36,6 @@ Module initializer
 """
 
 def main():
-    pprint(get_user_top_tracks_for_artist(sp, 'Ed Sheeran'))
-    
+    pprint(get_user_playlist_audio_features(sp, 'spotify:playlist:6FS0wzsoprqRG9PAFsmVSz'))    
 if __name__ == "__main__":
     main()

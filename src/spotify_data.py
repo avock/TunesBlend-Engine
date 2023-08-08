@@ -50,6 +50,8 @@ def get_album_genre(sp, track_uris):
 
         return album_genre_list
 
+
+
 """
 Function to retrieve the genre(s) of the artist for one or multiple tracks.
 """
@@ -67,6 +69,8 @@ def get_artist_genre(sp, track_uris):
         artist_id_list = [track['artists'][0]['id'] for track in track_details_list['tracks']]
         artist_genre_list = [sp.artist(artist)['genres'] for artist in artist_id_list]
         return artist_genre_list
+
+
 
 """
 Returns an array of playlist dictionaries in the following format:
@@ -92,6 +96,8 @@ def get_user_playlists(sp):
         playlist_list.append(playlist_detail)
     
     return playlist_list
+
+
 
 def get_user_playlist_count(sp):
     playlists = get_user_playlists(sp)
@@ -157,17 +163,23 @@ def get_playlist_tracks(sp, playlist_uri='spotify:playlist:6FS0wzsoprqRG9PAFsmVS
 
 """
 Note: Due to spotify's limitation, it is impossible to fetch > 100 top tracks for every user, the hard cap is 100
-Returns an array of track dictionaries in the following format:
+Returns the following dictionary:
     ```
     {
-        'track_rank': 1,
-        'track_name': 'Alone',
-        'track_uri': 'spotify:track:3MEYFivt6bilQ9q9mFWZ4g',
-        'track_href': 'https://open.spotify.com/track/3MEYFivt6bilQ9q9mFWZ4g',
-        'artist': 'Marshmello',
-        'artist_uri': 'spotify:artist:64KEffDW9EtZ1y2vBYgq8T',
-        'album': 'Alone',
-        'album_uri': 'spotify:album:7ePC9qS9mSOTY9E0YPP6yg'
+        'track_count' = TRACK_COUNT,
+        'tracks' = [
+            {
+                'track_rank': 1,
+                'track_name': 'Alone',
+                'track_uri': 'spotify:track:3MEYFivt6bilQ9q9mFWZ4g',
+                'track_href': 'https://open.spotify.com/track/3MEYFivt6bilQ9q9mFWZ4g',
+                'artist': 'Marshmello',
+                'artist_uri': 'spotify:artist:64KEffDW9EtZ1y2vBYgq8T',
+                'album': 'Alone',
+                'album_uri': 'spotify:album:7ePC9qS9mSOTY9E0YPP6yg'
+            }, 
+            ....
+        ]
     }
     ```
 """
@@ -207,6 +219,12 @@ def get_user_top_tracks(sp, limit=10, time_range='long_term'):
     
     return top_tracks
 
+
+
+"""
+Wrapper function to utilize spotify's search function. 
+Possible filters: album, artist, track, year, upc, isrc, genre
+"""
 def get_spotify_search(sp, limit=10, type='track', **kwargs):
     search_filters = ['album', 'artist', 'track', 'year', 'upc', 'isrc', 'genre']
     search_boolean_filters = ['tag_hipster', 'tag_new']
@@ -253,6 +271,8 @@ def get_spotify_search(sp, limit=10, type='track', **kwargs):
     }
     
     return search_result
+    
+    
     
 """
 Retrieves Spotify recommendations based on various seed parameters and audio features

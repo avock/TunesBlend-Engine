@@ -35,7 +35,7 @@ def get_playlist_audio_features(playlist, sp):
         status_update_message = f'Begin processing playlist {playlist["pid"]} at {current_time}'
         send_message(status_update_message)
 
-    chunk_size = 50
+    chunk_size = 100
     track_id = 0
     
     for i in range(0, len(track_uris), chunk_size):
@@ -264,3 +264,25 @@ def get_user_top_tracks_for_artist(sp, artist, top_track_count=5, time_range='lo
     
     tracks = [track for track in get_user_top_tracks(sp, track_source_count, time_range) if track['artist']==artist][:top_track_count]
     return tracks
+
+
+
+"""
+Returns audio_features for a user's playlist
+"""
+def get_user_playlist_audio_features(sp, playlist_uri) -> list[dict]:
+    
+    audio_features_list = []
+    playlist_tracks = get_playlist_tracks(sp, playlist_uri)
+    track_uris = [playlist['track_uri'] for playlist in playlist_tracks['tracks']]
+    
+    chunk_size = 100
+    
+    for i in range(0, len(track_uris), chunk_size):
+        chunk = track_uris[i:i + chunk_size]
+        audio_features_chunk = get_audio_features(sp, chunk)
+
+        for audio_feature in audio_features_chunk:
+            audio_features_list.append(audio_feature)
+
+    return audio_features_list
