@@ -248,3 +248,7 @@ def get_user_playlist_popularity(sp):
         playlist['popularity_percentage'] = str(playlist['popularity_percentage']) + '%'
 
     return playlist_popularity
+
+def get_user_top_tracks_for_artist(sp, artist, top_track_count=5, time_range='long_term', track_source_count=100):
+    tracks = [track for track in get_user_top_tracks(sp, track_source_count, time_range) if track['artist']==artist][:top_track_count]
+    return tracks
