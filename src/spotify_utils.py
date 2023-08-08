@@ -169,7 +169,7 @@ def get_user_total_tracks(sp):
 
 
 """
-
+Returns the tracks within the playlist that are in the user's overall top tracks
 """
 def get_playlist_top_tracks(sp, playlist_uri, track_count = 10, time_range = 'long_term'):
     valid_time_ranges = ['short_term', 'medium_term', 'long_term']
@@ -252,7 +252,7 @@ def get_user_playlist_popularity(sp):
 
 
 """
-
+Returns the top k tracks for the specified artist within the users's overall top tracks
 """
 def get_user_top_tracks_for_artist(sp, artist, top_track_count=5, time_range='long_term', track_source_count=100):
     
