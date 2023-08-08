@@ -7,4 +7,5 @@ test.py
 /src/__pycache__
 .cache
 *.png
-**/*.png
+/resources/audio_feature_plots/*.png
+/resources/wordclouds/*.png
