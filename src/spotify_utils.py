@@ -268,7 +268,7 @@ def get_user_top_tracks_for_artist(sp, artist, top_track_count=5, time_range='lo
 
 
 """
-Returns audio_features for a user's playlist
+Returns audio_features for all tracks in a user's playlist
 """
 def get_user_playlist_audio_features(sp, playlist_uri) -> list[dict]:
     
@@ -277,12 +277,40 @@ def get_user_playlist_audio_features(sp, playlist_uri) -> list[dict]:
     track_uris = [playlist['track_uri'] for playlist in playlist_tracks['tracks']]
     
     chunk_size = 100
+    track_id = 1
     
     for i in range(0, len(track_uris), chunk_size):
         chunk = track_uris[i:i + chunk_size]
         audio_features_chunk = get_audio_features(sp, chunk)
 
         for audio_feature in audio_features_chunk:
+            audio_feature['id'] = track_id
             audio_features_list.append(audio_feature)
+            track_id += 1
 
     return audio_features_list
+
+
+
+"""
+Returns details for all tracks in a user's playlist
+"""
+def get_user_playlist_details(sp, playlist_uri):
+        
+    playlist_details_list = []
+    playlist_tracks = get_playlist_tracks(sp, playlist_uri)
+    track_uris = [playlist['track_uri'] for playlist in playlist_tracks['tracks']]
+    
+    chunk_size = 50
+    track_id = 1
+    
+    for i in range(0, len(track_uris), chunk_size):
+        chunk = track_uris[i:i + chunk_size]
+        playlist_details_chunk = get_track_details(sp, chunk)
+
+        for track_details in playlist_details_chunk:
+            track_details['id'] = track_id
+            playlist_details_list.append(track_details)
+            track_id += 1
+
+    return playlist_details_list
