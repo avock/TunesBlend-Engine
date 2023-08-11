@@ -127,15 +127,14 @@ def get_playlist_genres(playlist, sp):
     
     for i in range(0, len(track_uris), chunk_size):
         chunk = track_uris[i:i + chunk_size]
-        track_details_chunk = get_artist_genre(sp, chunk)
+        track_genre_chunk = get_artist_genre(sp, chunk)
         
         pid = playlist['pid']
         
-        for track_details in track_details_chunk:
+        for genre in track_genre_chunk:
             id = f"{pid}_{track_id}"
-            print(type(track_details))
-            # track_details['id'] = id
-            playlist_details_list.append(track_details)
+            genre.insert(0, id)
+            playlist_details_list.append(genre)
             track_id += 1
 
     return playlist_details_list
