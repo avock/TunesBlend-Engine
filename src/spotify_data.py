@@ -57,18 +57,31 @@ Function to retrieve the genre(s) of the artist for one or multiple tracks.
 """
 def get_artist_genre(sp, track_uris):
     if not isinstance(track_uris, list):
-        
         track_details = sp.track(track_uris)
-        artist_id = track_details['artists'][0]['id']
-        artist_genre = sp.artist(artist_id)['genres']
-        
-        return artist_genre
-    
+        artist_ids = [artist['id'] for artist in track_details['artists']]
+        artist_genres = set()
+
+        for artist_id in artist_ids:
+            artist_genre = sp.artist(artist_id)['genres']
+            artist_genres.update(artist_genre)
+
+        return list(artist_genres)
     else:
         track_details_list = sp.tracks(track_uris)
-        artist_id_list = [track['artists'][0]['id'] for track in track_details_list['tracks']]
-        artist_genre_list = [sp.artist(artist)['genres'] for artist in artist_id_list]
-        return artist_genre_list
+        artist_genres_list = []
+
+        for track in track_details_list['tracks']:
+            artist_ids = [artist['id'] for artist in track['artists']]
+            artist_genres = set()
+
+            for artist_id in artist_ids:
+                artist_genre = sp.artist(artist_id)['genres']
+                artist_genres.update(artist_genre)
+
+            artist_genres_list.append(list(artist_genres))
+
+        return artist_genres_list
+
 
 
 
