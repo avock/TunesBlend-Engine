@@ -220,3 +220,10 @@ def extract_genres():
     else:
         print("Failed to fetch the webpage.")
         return []
+    
+def get_user_playlists_utils() -> list:
+    user_playlists = get_user_playlists(sp)
+    return user_playlists
+
+def test():
+    return 'test'
