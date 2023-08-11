@@ -38,7 +38,7 @@ Module initializer
 """
 
 def main():
-    get_genres_from_file()
+    print(extract_genres())
     
 if __name__ == "__main__":
     main()
