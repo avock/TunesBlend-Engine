@@ -38,13 +38,7 @@ Module initializer
 """
 
 def main():
-    target_playlist_uri = 'spotify:playlist:6FS0wzsoprqRG9PAFsmVSz'
-    playlist_details = get_user_playlist_details(sp, target_playlist_uri)
-    playlist_audio_features = get_user_playlist_audio_features(sp, target_playlist_uri)
-    playlist_genres = get_user_playlist_genres(sp, target_playlist_uri)
-    playlist_genres_frequency = get_user_playlist_genres_frequency(sp, target_playlist_uri)
-    
-    pprint(playlist_genres_frequency)
+    get_genres_from_file()
     
 if __name__ == "__main__":
     main()
