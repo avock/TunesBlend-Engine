@@ -314,3 +314,74 @@ def get_user_playlist_details(sp, playlist_uri):
             track_id += 1
 
     return playlist_details_list
+
+
+
+"""
+Returns details for all tracks in a user's playlist
+"""
+def get_user_playlist_audio_features(sp, playlist_uri):
+        
+    playlist_audio_features_list = []
+    playlist_tracks = get_playlist_tracks(sp, playlist_uri)
+    track_uris = [playlist['track_uri'] for playlist in playlist_tracks['tracks']]
+    
+    chunk_size = 50
+    track_id = 1
+    
+    for i in range(0, len(track_uris), chunk_size):
+        chunk = track_uris[i:i + chunk_size]
+        playlist_audio_features_chunk = get_audio_features(sp, chunk)
+
+        for track_details in playlist_audio_features_chunk:
+            track_details['id'] = track_id
+            playlist_audio_features_list.append(track_details)
+            track_id += 1
+
+    return playlist_audio_features_list
+
+def get_user_playlist_genres(sp, playlist_uri):
+        
+    playlist_genre_list = []
+    playlist_tracks = get_playlist_tracks(sp, playlist_uri)
+    track_uris = [playlist['track_uri'] for playlist in playlist_tracks['tracks']]
+    
+    chunk_size = 50
+    track_id = 1
+    
+    for i in range(0, len(track_uris), chunk_size):
+        chunk = track_uris[i:i + chunk_size]
+        playlist_audio_features_chunk = get_artist_genre(sp, chunk)
+
+        for track_details in playlist_audio_features_chunk:
+            track_object = {
+                'idx': track_id,
+                'track_genre': track_details
+            }
+            playlist_genre_list.append(track_object)
+            track_id += 1
+
+    return playlist_genre_list
+
+"""
+"""
+from collections import Counter
+
+def get_user_playlist_genres_frequency(sp, playlist_uri):
+    
+    playlist_genre_data = get_user_playlist_genres(sp, playlist_uri)
+    
+    genre_list = [genre for data in playlist_genre_data for genre in data['track_genre']]
+    
+    genre_frequency = Counter(genre_list).items()
+    
+    genre_frequency_list = []
+    for genre, frequency in genre_frequency:
+        genre_frequency_object = {
+            'genre': genre,
+            'frequency': frequency
+        }
+        genre_frequency_list.append(genre_frequency_object)
+    
+    return genre_frequency_list
+    
