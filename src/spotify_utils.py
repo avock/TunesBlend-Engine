@@ -200,6 +200,7 @@ def get_playlist_track_genre(playlist, sp):
 
 
 
+
 """
 Retrieves the total number of tracks a user has over each playlist
 """

@@ -21,7 +21,7 @@ spotify_scopes = "playlist-read-private playlist-modify-private playlist-modify-
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                client_secret=client_secret,
-                                               redirect_uri="http://localhost:8000/callback",
+                                               redirect_uri="http://127.0.0.1:8000/callback",
                                                scope=spotify_scopes))
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
