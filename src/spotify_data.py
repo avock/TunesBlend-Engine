@@ -270,11 +270,11 @@ def get_spotify_search(sp, limit=10, offset=0, type='track', **kwargs):
             'track_idx': idx,
             'track_name': track['name'],
             'track_uri': track['uri'],
-            # 'track_href': track['external_urls']['spotify'],
-            # 'artist': track['artists'][0]['name'],
-            # 'artist_uri': track['artists'][0]['uri'],
-            # 'album': track['album']['name'],
-            # 'album_uri': track['album']['uri'],
+            'track_href': track['external_urls']['spotify'],
+            'artist': track['artists'][0]['name'],
+            'artist_uri': track['artists'][0]['uri'],
+            'album': track['album']['name'],
+            'album_uri': track['album']['uri'],
         }
         search_result_list.append(track_info)
     

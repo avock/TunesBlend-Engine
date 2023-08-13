@@ -200,6 +200,8 @@ def extract_genres():
         print("Failed to fetch the webpage.")
         return []
     
+    
+    
 """
 Extracts updated genre list from everynoise.com and compares to current list
 """
@@ -211,10 +213,45 @@ def get_missing_genres():
         return 'No New Genres Found.'
     
     return missing_genres    
-    
-def get_user_playlists_utils() -> list:
-    user_playlists = get_user_playlists(sp)
-    return user_playlists
 
-def test():
-    return 'test'
+def get_audio_features_by_genre():
+    relative_processed_data_path = f'data/processed_data/genres/audio_features_by_genre.csv'
+    processed_data_path = os.path.join(current_dir, relative_processed_data_path)
+    
+    total_genres = len(global_genres)
+    
+    for idx, genre in enumerate(global_genres):
+        
+        if idx % 100 == 0:
+            status_update_message = f'Analyzing Genre {idx}: {genre.capitalize()}. {round(idx/total_genres, 2)}% completed.'
+            print(status_update_message)
+            send_message(status_update_message, chat_id_dev)
+        
+        genre_tracks = get_spotify_search(sp, 50, genre=genre)['tracks']
+        
+        track_uri_list = []
+        combined_list = []
+        
+        # reformatting track JSON object to remove unecessary information
+        for idx, track in enumerate(genre_tracks):
+            new_track = {
+                'genre': genre,
+                'track_name': track['track_name'],
+                'track_uri': track['track_uri']
+            }
+            genre_tracks[idx] = new_track
+        
+        # extrac†ing list of track_uris to retrieve audio_features
+        for track in genre_tracks:
+            track_uri = track['track_uri']
+            track_uri_list.append(track_uri)
+
+        audio_features_list = get_audio_features(sp, track_uri_list)
+        
+        for idx, track in enumerate(genre_tracks):
+            if idx < len(audio_features_list):
+                track.update(audio_features_list[idx])
+                combined_list.append(track)
+        
+        write_data(combined_list, processed_data_path)
+        
