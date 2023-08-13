@@ -38,8 +38,7 @@ Module initializer
 """
 
 def main():
-    # pprint(get_spotify_search(sp, limit=50, offset=10, genre='singer-songwriter pop'))
-    pprint(get_artist_genre(sp, 'spotify:track:0j1Ia2lQWrcXrQZI4AdJlk'))
-
+    print(get_missing_genres())
+    
 if __name__ == "__main__":
     main()

@@ -216,7 +216,7 @@ def get_user_total_tracks(sp):
 """
 Returns the tracks within the playlist that are in the user's overall top tracks
 """
-def get_playlist_top_tracks(sp, playlist_uri, track_count = 10, time_range = 'long_term'):
+def get_user_playlist_top_tracks(sp, playlist_uri, track_count = 10, time_range = 'long_term'):
     valid_time_ranges = ['short_term', 'medium_term', 'long_term']
     if time_range not in valid_time_ranges:
         raise ValueError('Value of range must be short_term (4 weeks), medium_term (6 months) or long_term (all time)')
@@ -385,6 +385,11 @@ def get_user_playlist_audio_features(sp, playlist_uri):
 
     return playlist_audio_features_list
 
+
+
+"""
+Returns genres for every track in a user's playlist
+"""
 def get_user_playlist_genres(sp, playlist_uri):
         
     playlist_genre_list = []
@@ -408,7 +413,10 @@ def get_user_playlist_genres(sp, playlist_uri):
 
     return playlist_genre_list
 
+
+
 """
+Returns frequency of each genre in a user's playlist
 """
 from collections import Counter
 
@@ -429,4 +437,3 @@ def get_user_playlist_genres_frequency(sp, playlist_uri):
         genre_frequency_list.append(genre_frequency_object)
     
     return genre_frequency_list
-    
