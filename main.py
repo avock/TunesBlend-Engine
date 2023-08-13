@@ -41,7 +41,7 @@ def main():
     # for genre in global_genres[:1]:
     #     pprint(get_spotify_search(sp, 50, genre=genre))
     #     print(genre)
-    pprint(get_audio_features(sp, '14FStviG05yCZWe4KfzO13'))
+    pprint(get_audio_features(sp, 'spotify:track:4OAuvHryIVv4kMDNSLuPt6'))
         
 if __name__ == "__main__":
     main()

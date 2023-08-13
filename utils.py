@@ -214,6 +214,9 @@ def get_missing_genres():
     
     return missing_genres    
 
+"""
+Retrieves 50 tracks from each genre, as well as their audio_features
+"""
 def get_audio_features_by_genre():
     relative_processed_data_path = f'data/processed_data/genres/audio_features_by_genre.csv'
     processed_data_path = os.path.join(current_dir, relative_processed_data_path)
@@ -221,6 +224,10 @@ def get_audio_features_by_genre():
     total_genres = len(global_genres)
     
     for idx, genre in enumerate(global_genres):
+        
+        genres_to_skip = ['guidance']
+        if genre in genres_to_skip:
+            continue
         
         try:
             if idx % 100 == 0:
