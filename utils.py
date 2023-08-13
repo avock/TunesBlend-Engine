@@ -206,6 +206,10 @@ Extracts updated genre list from everynoise.com and compares to current list
 def get_missing_genres():
     new_genre_list = extract_genres()
     missing_genres = [genre for genre in new_genre_list if genre not in global_genres]
+    
+    if not missing_genres:
+        return 'No New Genres Found.'
+    
     return missing_genres    
     
 def get_user_playlists_utils() -> list:
