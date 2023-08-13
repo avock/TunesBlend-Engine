@@ -23,7 +23,13 @@ Function to write data to a CSV file
 """
 def write_data(audio_features_list, file_path):
     audio_features_df = pd.DataFrame(audio_features_list)
-    audio_features_df.to_csv(file_path, mode='a', index=False)
+    if not os.path.exists(file_path):
+        # Write header only if the file doesn't exist
+        audio_features_df.to_csv(file_path, index=False)
+    else:
+        # Append data without the header
+        audio_features_df.to_csv(file_path, mode='a', header=False, index=False)
+
 
 
 

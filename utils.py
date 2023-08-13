@@ -222,36 +222,45 @@ def get_audio_features_by_genre():
     
     for idx, genre in enumerate(global_genres):
         
-        if idx % 100 == 0:
-            status_update_message = f'Analyzing Genre {idx}: {genre.capitalize()}. {round(idx/total_genres, 2)}% completed.'
-            print(status_update_message)
-            send_message(status_update_message, chat_id_dev)
-        
-        genre_tracks = get_spotify_search(sp, 50, genre=genre)['tracks']
-        
-        track_uri_list = []
-        combined_list = []
-        
-        # reformatting track JSON object to remove unecessary information
-        for idx, track in enumerate(genre_tracks):
-            new_track = {
-                'genre': genre,
-                'track_name': track['track_name'],
-                'track_uri': track['track_uri']
-            }
-            genre_tracks[idx] = new_track
-        
-        # extrac†ing list of track_uris to retrieve audio_features
-        for track in genre_tracks:
-            track_uri = track['track_uri']
-            track_uri_list.append(track_uri)
+        try:
+            if idx % 100 == 0:
+                status_update_message = f'Analyzing Genre {idx}: {genre.capitalize()}. {round(idx*100/total_genres, 2)}% completed.'
+                print(status_update_message)
+                send_message(status_update_message, chat_id_dev)
+            
+            genre_tracks = get_spotify_search(sp, 50, genre=genre)['tracks']
+            
+            track_uri_list = []
+            combined_list = []
+            
+            # reformatting track JSON object to remove unecessary information
+            
+            unique_tracks = []
+            for idx, track in enumerate(genre_tracks):
+                if track['track_uri'] not in unique_tracks:
+                    new_track = {
+                        'genre': genre,
+                        'track_name': track['track_name'],
+                        'track_uri': track['track_uri']
+                    }
+                    genre_tracks[idx] = new_track
+            
+            # extrac†ing list of track_uris to retrieve audio_features
+            for track in genre_tracks:
+                track_uri = track['track_uri']
+                track_uri_list.append(track_uri)
 
-        audio_features_list = get_audio_features(sp, track_uri_list)
+            audio_features_list = get_audio_features(sp, track_uri_list)
+            
+            for idx, track in enumerate(genre_tracks):
+                if idx < len(audio_features_list):
+                    track.update(audio_features_list[idx])
+                    combined_list.append(track)
+            
+            write_data(combined_list, processed_data_path)
         
-        for idx, track in enumerate(genre_tracks):
-            if idx < len(audio_features_list):
-                track.update(audio_features_list[idx])
-                combined_list.append(track)
-        
-        write_data(combined_list, processed_data_path)
+        except Exception as e:
+            error_message = f'An error occured at genre_idx = {idx}. Error: {e}'
+            print(error_message)
+            send_message(error_message)
         
