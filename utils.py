@@ -270,4 +270,18 @@ def get_audio_features_by_genre():
             error_message = f'An error occured at genre_idx = {idx}. Error: {e}'
             print(error_message)
             send_message(error_message)
+
+
         
+"""
+"""
+def play_track_in_browser():
+    
+    import webbrowser
+    
+    track_uri = 'spotify:track:4dI4oscajpdtjpg2dP1x28'
+    webbrowser.open_new_tab(get_track_details(sp, track_uri)['track_url'])
+    pprint(get_track_details(sp, track_uri))
+
+def test_utils():
+    print('test utils successful')
