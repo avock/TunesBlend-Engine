@@ -38,15 +38,20 @@ Module initializer
 """
 
 def main():
+    import webbrowser
+    
     # for genre in global_genres[:1]:
     #     pprint(get_spotify_search(sp, 50, genre=genre))
     #     print(genre)
-    track_uri = 'spotify:track:0E4Y1XIbs8GrAT1YqVy6dq'
+    track_uri = 'spotify:track:4dI4oscajpdtjpg2dP1x28'
     search_track_name = 'The Nights'
     
     # print(get_audio_features(sp, (get_spotify_search(sp, track=search_track_name))['tracks'][0]['track_uri']))
-    print(get_audio_features(sp, track_uri))
-    # pprint(get_track_details(sp, track_uri))
+    
+    # print(get_audio_features(sp, track_uri))
+    
+    webbrowser.open_new_tab(get_track_details(sp, track_uri)['track_url'])
+    pprint(get_track_details(sp, track_uri))
 
         
 if __name__ == "__main__":
