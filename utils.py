@@ -275,13 +275,13 @@ def get_audio_features_by_genre():
         
 """
 """
-def play_track_in_browser():
+def play_track_in_browser(track_uri):
     
     import webbrowser
     
-    track_uri = 'spotify:track:4dI4oscajpdtjpg2dP1x28'
+    track_uri = track_uri
     webbrowser.open_new_tab(get_track_details(sp, track_uri)['track_url'])
-    pprint(get_track_details(sp, track_uri))
+    print(get_track_details(sp, track_uri))
 
 def test_utils():
     print('test utils successful')

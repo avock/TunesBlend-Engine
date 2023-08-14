@@ -154,10 +154,13 @@ def get_playlist_tracks(sp, playlist_uri='spotify:playlist:6FS0wzsoprqRG9PAFsmVS
     track_list = []
     
     for idx, track in enumerate(tracks, start=1):
+        date_added = track['added_at']
         track = track['track']
         track_info = {
             'track_idx': idx,
             'track_name': track['name'],
+            'date_added': date_added,
+            'date_released': track['album']['release_date'],
             'track_uri': track['uri'],
             'track_href': track['external_urls']['spotify'],
             'artist': track['artists'][0]['name'],
