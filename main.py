@@ -41,7 +41,7 @@ def main():
     # for genre in global_genres[:1]:
     #     pprint(get_spotify_search(sp, 50, genre=genre))
     #     print(genre)
-    track_uri = 'spotify:track:4h8VwCb1MTGoLKueQ1WgbD'
+    track_uri = 'spotify:track:0E4Y1XIbs8GrAT1YqVy6dq'
     search_track_name = 'The Nights'
     
     # print(get_audio_features(sp, (get_spotify_search(sp, track=search_track_name))['tracks'][0]['track_uri']))
