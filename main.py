@@ -41,12 +41,12 @@ def main():
     # for genre in global_genres[:1]:
     #     pprint(get_spotify_search(sp, 50, genre=genre))
     #     print(genre)
-    track_uri = 'spotify:track:1neFq9Jrg8jprpQaNUlHRb'
+    track_uri = 'spotify:track:4h8VwCb1MTGoLKueQ1WgbD'
     search_track_name = 'The Nights'
     
     # print(get_audio_features(sp, (get_spotify_search(sp, track=search_track_name))['tracks'][0]['track_uri']))
-    # print(get_audio_features(sp, track_uri))
-    pprint(get_track_details(sp, track_uri))
+    print(get_audio_features(sp, track_uri))
+    # pprint(get_track_details(sp, track_uri))
 
         
 if __name__ == "__main__":
