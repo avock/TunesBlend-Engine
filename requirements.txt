@@ -13,3 +13,6 @@ wordcloud
 # useful jupyternotebook libraries
 jupyterthemes
 jupyter_contrib_nbextensions
+
+# ML model libraries
+joblib

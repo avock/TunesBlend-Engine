@@ -17,13 +17,11 @@ Function to retreive the details of one or multiple tracks.
 """
 def get_track_details(sp, track_uris):
     if not isinstance(track_uris, list):
-
         track_details = sp.track(track_uris)
         filtered_track_details = filter_track_details(track_details)
         
         return filtered_track_details
     else:
-
         track_details_list = sp.tracks(track_uris)['tracks']
         filtered_track_details_list = filter_track_details(track_details_list)
 
