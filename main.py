@@ -42,8 +42,8 @@ def main():
     playlist_uri = 'spotify:playlist:699RMfk5lxJ9uf7ZwMktYa'
     # pprint(play_track_in_browser(track_uri))
     # print(get_audio_features(sp, track_uri))
-    pprint(get_user_playlist_genres_frequency(sp, playlist_uri))
-    # pprint(get_spotify_search(sp, genre='gen z singer-songwriter'))
+    # pprint(get_user_playlist_genres_frequency(sp, playlist_uri))
+    pprint(get_spotify_search(sp, genre=['gen z singer-songwriter', 'pov: indie']))
 
         
 if __name__ == "__main__":
