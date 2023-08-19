@@ -38,7 +38,7 @@ Module initializer
 """
 
 def main():
-    track_uri = 'spotify:track:0Dc5fbpiEcLYnYajH8FqDt'
+    track_uri = 'spotify:track:1JliNSftRCoPT6WyruaYTl'
     pprint(play_track_in_browser(track_uri))
     # print(get_audio_features(sp, track_uri))
     # print(get_user_playlists(sp))
