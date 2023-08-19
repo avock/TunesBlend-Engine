@@ -38,10 +38,12 @@ Module initializer
 """
 
 def main():
-    track_uri = 'spotify:track:1JliNSftRCoPT6WyruaYTl'
-    pprint(play_track_in_browser(track_uri))
+    track_uri = 'spotify:playlist:1f2neve1uJPOCfkahOkdEf'
+    playlist_uri = 'spotify:playlist:699RMfk5lxJ9uf7ZwMktYa'
+    # pprint(play_track_in_browser(track_uri))
     # print(get_audio_features(sp, track_uri))
-    # print(get_user_playlists(sp))
+    pprint(get_user_playlist_genres_frequency(sp, playlist_uri))
+    # pprint(get_spotify_search(sp, genre='gen z singer-songwriter'))
 
         
 if __name__ == "__main__":

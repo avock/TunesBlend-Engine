@@ -423,7 +423,6 @@ from collections import Counter
 def get_user_playlist_genres_frequency(sp, playlist_uri):
     
     playlist_genre_data = get_user_playlist_genres(sp, playlist_uri)
-    
     genre_list = [genre for data in playlist_genre_data for genre in data['track_genre']]
     
     genre_frequency = Counter(genre_list).items()
@@ -435,5 +434,7 @@ def get_user_playlist_genres_frequency(sp, playlist_uri):
             'frequency': frequency
         }
         genre_frequency_list.append(genre_frequency_object)
-    
-    return genre_frequency_list
+
+    sorted_genre_frequency = sorted(genre_frequency_list, key=lambda x: x['frequency'], reverse=True)
+
+    return sorted_genre_frequency
